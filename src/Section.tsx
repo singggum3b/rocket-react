@@ -1,4 +1,4 @@
-import { Component,IComponent } from "./Component";
+import { Component, IComponent } from "./Component";
 
 export interface ISection {
     name: string;
@@ -12,6 +12,7 @@ export class Section implements ISection{
 
     constructor(public section: ISection) {
         Object.assign(this, section);
+        this.components = section.components.map((com) => (new Component(com)));
     }
 
     public getComponentWithPath() {
