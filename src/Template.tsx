@@ -1,4 +1,4 @@
-import { ISection } from "./Section";
+import { Section, ISection } from "./Section";
 
 export interface ITemplate {
     name: string;
@@ -8,13 +8,13 @@ export interface ITemplate {
 export class Template implements ITemplate {
 
     public name: string;
-    public section: ISection[];
+    public section: Section[];
 
     constructor(public template: ITemplate) {
         Object.assign(this, template);
     }
 
-    public getLayout() {
+    public getLayout(): any {
         return [];
     }
 }

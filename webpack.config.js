@@ -18,6 +18,10 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 loaders: ["babel?presets[]=es2015", "ts-loader"],
+            },
+            {
+                test: /\.json?$/,
+                loader: "json",
             }
         ],
 

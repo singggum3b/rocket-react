@@ -7,7 +7,14 @@
         {
           "name": "logo",
           "props": {
-
+            "color": "red"
+          }
+        },
+        {
+          "name": "brand",
+          "props": {
+            "color": "blue",
+            "famous": true
           }
         }
       ]
