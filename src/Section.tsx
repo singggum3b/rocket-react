@@ -5,11 +5,16 @@ export interface ISection {
     components: IComponent[];
 }
 
-export class Section implements ISection {
+export class Section implements ISection{
+
     public name: string;
     public components: IComponent[];
-    constructor({ name, components }: ISection) {
-        this.name = name;
-        this.components = components;
+
+    constructor(public section: ISection) {
+        Object.assign(this, section);
+    }
+
+    public getComponentWithPath() {
+        return this.components.filter((com) => (com.path));
     }
 }

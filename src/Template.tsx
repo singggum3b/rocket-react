@@ -1,13 +1,20 @@
 import { ISection } from "./Section";
-import { IComponent } from "./Component";
 
 export interface ITemplate {
     name: string;
     section: ISection[];
 }
 
-export class Template {
-    constructor() {
+export class Template implements ITemplate {
 
+    public name: string;
+    public section: ISection[];
+
+    constructor(public template: ITemplate) {
+        Object.assign(this, template);
+    }
+
+    public getLayout() {
+        return [];
     }
 }

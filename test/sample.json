@@ -1,0 +1,16 @@
+{
+  "name": "default",
+  "sections": {
+    "header": {
+      "name": "header",
+      "components": [
+        {
+          "name": "logo",
+          "props": {
+
+          }
+        }
+      ]
+    }
+  }
+}

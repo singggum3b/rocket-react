@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: "./test/hello.tsx",
     output: {
         filename: "./dist/bundle.js",
     },
@@ -15,7 +15,10 @@ module.exports = {
     module: {
         loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            { test: /\.tsx?$/, loader: "ts-loader" }
+            {
+                test: /\.tsx?$/,
+                loaders: ["babel?presets[]=es2015", "ts-loader"],
+            }
         ],
 
         preLoaders: [
