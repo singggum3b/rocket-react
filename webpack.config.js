@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./test/hello.tsx",
+    entry: "./test/hello.js",
     output: {
         filename: "./dist/bundle.js",
     },
@@ -16,19 +16,15 @@ module.exports = {
         loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             {
-                test: /\.tsx?$/,
-                loaders: ["babel?presets[]=es2015", "ts-loader"],
+                test: /\.js?$/,
+                loaders: ["babel"],
+                exclude: /node_modules/,
             },
             {
                 test: /\.json?$/,
                 loader: "json",
             }
         ],
-
-        preLoaders: [
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { test: /\.js$/, loader: "source-map-loader" }
-        ]
     },
 
     // When importing a module whose path matches one of the following, just
