@@ -1,3 +1,3 @@
 
-var str: number = 'hello world!';
+var str = 'hello world!';
 console.log(str);
