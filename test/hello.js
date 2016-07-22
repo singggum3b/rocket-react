@@ -1,10 +1,11 @@
 // @flow
 
-const str:number = "hello world!";
-console.log(str);
-
-function sum(a: number, b: number): number {
-	return a + b;
+interface Dumb {
+	x : number;
 }
 
-sum(1, "a"); // <= typo
+function sum(a: Dumb, b: number): number {
+	return "sdfsdf";
+}
+
+sum({ x: "Fbfg" }, 2); // <= typo

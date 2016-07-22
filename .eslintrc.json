@@ -2,9 +2,12 @@
   "extends": "airbnb",
   "parser": "babel-eslint",
   "plugins": [
+		"flow-vars",
     "flowtype"
   ],
   "rules": {
+		"flow-vars/define-flow-type": 1,
+		"flow-vars/use-flow-type": 1,
     "flowtype/require-parameter-type": 2,
     "flowtype/require-return-type": [
       2,
@@ -26,6 +29,7 @@
       "^([A-Z][a-z0-9]+)+Type$"
     ],
 
+		"comma-spacing": 0,
 		"indent": ["error","tab"],
 		"no-redeclare": [2, {"builtinGlobals": true}],
 		"no-unused-vars": [2, {

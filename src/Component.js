@@ -1,3 +1,8 @@
+export type ComponentType = {
+	id: string,
+	name: string,
+	props: Map<string,any>
+}
 
-var str = 'hello world!';
-console.log(str);
+export class Component {
+}
