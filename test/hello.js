@@ -1,11 +1,8 @@
 // @flow
+import "babel-polyfill";
+import fromJSON from "tcomb/lib/fromJSON";
+import { JsonTemplateType } from "../src/Types";
+const sample = require("./sample.json");
 
-interface Dumb {
-	x : number;
-}
+console.log(new JsonTemplateType(sample));
 
-function sum(a: Dumb, b: number): number {
-	return "sdfsdf";
-}
-
-sum({ x: "Fbfg" }, 2); // <= typo

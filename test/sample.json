@@ -5,12 +5,14 @@
       "name": "header",
       "components": [
         {
+					"id": "1",
           "name": "logo",
           "props": {
             "color": "red"
           }
         },
         {
+					"id": "3",
           "name": "brand",
           "props": {
             "color": "blue",

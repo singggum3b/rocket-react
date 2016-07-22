@@ -1,8 +1,13 @@
-export type ComponentType = {
-	id: string,
-	name: string,
-	props: Map<string,any>
-}
+// @flow
+import { JsonComponentType } from "./Types";
 
-export class Component {
+export class ComponentObj {
+	constructor(cmp : JsonComponentType) {
+		Object.assign(this,cmp);
+	}
+
+	getComponentClass(): string {
+		return this.name;
+	}
+
 }
