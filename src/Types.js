@@ -1,24 +1,36 @@
 // @flow
 
-Map.fromJSON = function (val: {[name: string]: any}): Map {
-	return new Map(Object.entries(val));
-};
+import type { $Refinement, $Reify } from "tcomb";
+import t from "tcomb";
+import fromJSON from "tcomb/lib/fromJSON";
 
-export type JsonComponentType = {
-	id: string;
-	name: string;
-	path?: string;
+export type JSONComponentType = {
+	id: string,
+	name: string,
+	path?: string,
+	section: string,
 	props: {
 		[name: string]: any
 	}
 }
 
-export type JsonSectionType = {
-	name: string;
-	components: Array<JsonComponentType>;
+export type JSONTemplateType = {
+	name: string,
+	componentsList: Array<JSONComponentType>
 }
 
-export type JsonTemplateType = {
-	name: string;
-	sections: Map<string,JsonSectionType>
+export class Template {
+
+	constructor(tpl: JSONTemplateType) {
+		Object.assign(this,tpl);
+	}
+
+	getLayout() {
+
+	}
+
+	getComponentsMapForRoute(route) {
+
+	}
+
 }

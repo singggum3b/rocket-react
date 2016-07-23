@@ -5,6 +5,7 @@
 [include]
 
 [libs]
+definitions
 
 [options]
 esproposal.decorators=ignore
