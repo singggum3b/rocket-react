@@ -1,8 +1,15 @@
 // @flow
+import installTypeFormatter from "tcomb/lib/installTypeFormatter";
+installTypeFormatter();
+
 import "babel-polyfill";
 import fromJSON from "tcomb/lib/fromJSON";
-import { JsonTemplateType } from "../src/Types";
-const sample = require("./sample.json");
+import type { Template, JSONTemplateType } from "../src/class/template.class";
 
-console.log(new JsonTemplateType(sample));
+
+const sample = require("./sample.json");
+const parsed: JSONTemplateType = fromJSON(sample,JSONTemplateType);
+const template = new Template(parsed);
+// ============================
+console.log(parsed,template);
 

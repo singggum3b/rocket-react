@@ -1,25 +1,23 @@
 {
   "name": "default",
-  "sections": {
-    "header": {
-      "name": "header",
-      "components": [
-        {
-					"id": "1",
-          "name": "logo",
-          "props": {
-            "color": "red"
-          }
-        },
-        {
-					"id": "3",
-          "name": "brand",
-          "props": {
-            "color": "blue",
-            "famous": true
-          }
-        }
-      ]
-    }
-  }
+	"color": "red",
+	"componentsList": [
+		{
+			"id": "1",
+			"name": "logo",
+			"section": "header",
+			"props": {
+				"color": "red"
+			}
+		},
+		{
+			"id": "3",
+			"name": "brand",
+			"section": "header",
+			"props": {
+				"color": "blue",
+				"famous": true
+			}
+		}
+	]
 }

@@ -8,9 +8,9 @@
   "rules": {
 		"flow-vars/define-flow-type": 1,
 		"flow-vars/use-flow-type": 1,
-    "flowtype/require-parameter-type": 2,
+    "flowtype/require-parameter-type": 1,
     "flowtype/require-return-type": [
-      2,
+      1,
       "always",
       {
         "annotateUndefined": "never"
@@ -26,9 +26,10 @@
     ],
     "flowtype/type-id-match": [
       2,
-      "^([A-Z][a-z0-9]+)+Type$"
+      "^([A-Z]+[a-z0-9]+)+Type$"
     ],
 
+		"no-unused-expressions": 1,
 		"comma-spacing": 0,
 		"indent": ["error","tab"],
 		"no-redeclare": [2, {"builtinGlobals": true}],
@@ -39,7 +40,8 @@
 		"no-console": 0,
 		"quotes": [2, "double"],
 		"jsx-quotes": [2, "prefer-double"],
-		"no-mixed-spaces-and-tabs": [2, "smart-tabs"]
+		"no-mixed-spaces-and-tabs": [2, "smart-tabs"],
+		"object-curly-spacing": 0
   },
   "settings": {
     "flowtype": {
