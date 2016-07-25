@@ -1,11 +1,11 @@
 // @flow
 
 import fromJSON from "tcomb/lib/fromJSON";
-import type {JSONSiteMapType,JSONTemplateType} from "./type/json.type";
+import type {JSONSiteMapType,JSONRouteType} from "./type/json.type";
 import type {ComponentResolverType,RouteDataResolverType} from "./type/factoryOption.type";
 import type {TemplateResolverType,ComponentListResolverType} from "./type/factoryOutput.type";
 import {SiteMap} from "./class/sitemap.class";
-import {Template} from "./class/template.class";
+import {Route} from "./class/route.class";
 
 export function createSyncFactory(option: {
 	siteMap: JSONSiteMapType,
@@ -15,9 +15,26 @@ export function createSyncFactory(option: {
 	siteMap: SiteMap,
 } {
 	const siteMap = option.siteMap ? new SiteMap(option.siteMap) : undefined;
-
 	return {
 		siteMap,
+		getTemplateClass(routeObj: Route) {
+			return function (nextState,cb) {
+				routeObj.constructor
+					.getTemplateClass(nextState,routeObj,option.componentResolver).then(cb);
+			};
+		},
+		getIndexComponentList(routeObj: Route) {
+			return function (nextState,cb) {
+				routeObj.constructor
+					.getIndexComponentList(nextState,routeObj,option.componentResolver).then(cb);
+			};
+		},
+		getSubRouteComponentList(routeObj: Route) {
+			return function (nextState,cb) {
+				routeObj.constructor
+					.getSubRouteComponentList(nextState,routeObj,option.componentResolver).then(cb);
+			};
+		},
 	};
 }
 

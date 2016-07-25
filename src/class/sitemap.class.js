@@ -1,15 +1,15 @@
 // @flow
 import type {JSONSiteMapType} from "../type/json.type";
-import {Template} from "./template.class";
+import {Route} from "./route.class";
 
 export class SiteMap<T : JSONSiteMapType> {
 
 	meta : T;
-	routeList : Array<Template>;
+	routeList : Array<Route>;
 
 	constructor(sitemap: T) {
 		this.meta = sitemap;
-		this.routeList = sitemap.map((route) => new Template(route));
+		this.routeList = sitemap.map((route) => new Route(route));
 	}
 
 }

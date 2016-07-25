@@ -1,8 +1,27 @@
 // @flow
-import type {JSONTemplateType,JSONComponentType} from "../type/json.type";
+import type {JSONRouteType,JSONComponentType} from "../type/json.type";
+import type {ComponentResolverType,RouteDataResolverType} from "../type/factoryOption.type";
 import {Component} from "./component.class";
 
-export class Template<T: JSONTemplateType> {
+export class Route<T: JSONRouteType> {
+
+	static getTemplateClass(
+		nextState: {location: Object}, routeObj: Route,resolver : ComponentResolverType
+	) {
+
+	}
+
+	static getIndexComponentList(
+		nextState: {location: Object}, routeObj: Route,resolver : ComponentResolverType
+	) {
+
+	}
+
+	static getSubRouteComponentList(
+		nextState: {location: Object}, routeObj: Route,resolver : ComponentResolverType
+	) {
+
+	}
 
 	meta: T;
 	templateName: string;
@@ -26,10 +45,6 @@ export class Template<T: JSONTemplateType> {
 					[section]: result[section] ? result[section].concat(name) : [name],
 				});
 			},{});
-	}
-
-	getComponentsMapForRoute(route) {
-
 	}
 
 }

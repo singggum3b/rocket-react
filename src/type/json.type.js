@@ -12,9 +12,9 @@ export type JSONComponentType = {
 	}
 }
 
-export type JSONTemplateType = {
+export type JSONRouteType = {
 	templateName: string,
 	componentsList: Array<JSONComponentType>
 }
 
-export type JSONSiteMapType = Array<JSONTemplateType>
+export type JSONSiteMapType = Array<JSONRouteType>

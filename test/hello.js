@@ -5,7 +5,7 @@ installTypeFormatter();
 
 import "babel-polyfill";
 import fromJSON from "tcomb/lib/fromJSON";
-import {Template} from "../src/class/template.class";
+import {Route as RouteClass} from "../src/class/route.class";
 import {Component} from "../src/class/component.class";
 import type {JSONSiteMapType,JSONTemplateType} from "../src/type/json.type";
 import {createSyncFactory} from "../src";
@@ -19,7 +19,7 @@ const parsedRoute = fromJSON(sampleRoute, JSONTemplateType);
 const parsedSiteMap = fromJSON(sampleSitemap, JSONSiteMapType);
 
 // ============================
-console.log(new Template(parsedRoute), parsedSiteMap);
+console.log(new RouteClass(parsedRoute), parsedSiteMap);
 // ============================
 const customRequire = require.context("./components",false,/\.js$/);
 function moduleResolver(name) {
@@ -54,13 +54,17 @@ const syncRouteFactory = createSyncFactory({
 
 // =====================================
 
-const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: Template)=>{
+const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=>{
 	return (
-		<Route getComponent={routeObj.getTemplate}>
-			<IndexRoute getComponents={routeObj.getIndexComponentList} />
+		<Route key={routeObj.path} getComponent={syncRouteFactory.getTemplateClass(routeObj)}>
+			<IndexRoute getComponents={syncRouteFactory.getIndexComponentList(routeObj)} />
 			{
 				routeObj.componentsList.map((cmp: Component)=> {
-					return <Route path={cmp.path} getComponents={routeObj.getSubRouteComponent} />;
+					return (
+						<Route key={cmp.annotatedName}
+									 path={cmp.path}
+									 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj)} />
+					);
 				})
 			}
 		</Route>
