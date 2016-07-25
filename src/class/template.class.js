@@ -5,6 +5,8 @@ import {Component} from "./component.class";
 export class Template<T: JSONTemplateType> {
 
 	meta: T;
+	templateName: string;
+	path: string;
 	componentsList: Array<Component<*>>;
 	layout: {
 		[section: string]: Array<string>
@@ -12,8 +14,10 @@ export class Template<T: JSONTemplateType> {
 
 	constructor(tpl: T) {
 		this.meta = tpl;
+		this.templateName = tpl.templateName;
+		this.path = tpl.path || "/";
 		this.componentsList = tpl.componentsList.map(
-			(obj) => new Component(obj)
+			(obj) => new Component(obj,this.path)
 		);
 		this.layout = tpl.componentsList
 			.reduce((result,cmp) => {

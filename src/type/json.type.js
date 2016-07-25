@@ -13,6 +13,8 @@ export type JSONComponentType = {
 }
 
 export type JSONTemplateType = {
-	name: string,
+	templateName: string,
 	componentsList: Array<JSONComponentType>
 }
+
+export type JSONSiteMapType = Array<JSONTemplateType>

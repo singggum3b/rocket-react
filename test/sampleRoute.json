@@ -1,9 +1,12 @@
 {
-  "name": "default",
-	"color": "red",
+	"templateName": "template-default",
+	"props": {
+		"color": "blue"
+	},
 	"componentsList": [
 		{
 			"id": "1",
+			"path": "logo",
 			"name": "logo",
 			"section": "header",
 			"props": {

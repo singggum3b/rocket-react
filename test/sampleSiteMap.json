@@ -1,0 +1,30 @@
+[
+	{
+		"templateName": "template-default",
+		"color": "red",
+		"path" : "/",
+		"props": {
+			"color": "blue"
+		},
+		"componentsList": [
+			{
+				"id": "1",
+				"path": "logo",
+				"name": "logo",
+				"section": "header",
+				"props": {
+					"color": "red"
+				}
+			},
+			{
+				"id": "3",
+				"name": "brand",
+				"section": "header",
+				"props": {
+					"color": "blue",
+					"famous": true
+				}
+			}
+		]
+	}
+]
