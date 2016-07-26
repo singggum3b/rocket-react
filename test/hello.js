@@ -10,8 +10,7 @@ import {Component} from "../src/class/component.class";
 import type {JSONSiteMapType,JSONTemplateType} from "../src/type/json.type";
 import {createSyncFactory} from "../src";
 
-import React from "react";
-import {Route,IndexRoute} from "react-router";
+import {Route, Router, IndexRoute, browserHistory} from "react-router";
 
 const sampleRoute = require("./sampleRoute.json");
 const sampleSitemap = require("./sampleSiteMap.json");
@@ -63,10 +62,17 @@ const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=
 					return (
 						<Route key={cmp.annotatedName}
 									 path={cmp.path}
-									 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj)} />
+									 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp.path)} />
 					);
 				})
 			}
 		</Route>
 	)
 });
+
+console.log(routeList);
+ReactDOM.render((
+	<Router history={browserHistory}>
+		{routeList}
+	</Router>
+), document.getElementById("example"));

@@ -29,10 +29,15 @@ export function createSyncFactory(option: {
 					.getIndexComponentList(nextState,routeObj,option.componentResolver).then(cb);
 			};
 		},
-		getSubRouteComponentList(routeObj: Route) {
+		getSubRouteComponentList(routeObj: Route,componentPath: string) {
 			return function (nextState,cb) {
 				routeObj.constructor
-					.getSubRouteComponentList(nextState,routeObj,option.componentResolver).then(cb);
+					.getSubRouteComponentList(
+						nextState,
+						routeObj,
+						option.componentResolver,
+						componentPath
+					).then(cb);
 			};
 		},
 	};
