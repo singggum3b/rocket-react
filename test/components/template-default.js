@@ -1,6 +1,7 @@
 export default class TemplateDefault extends React.Component {
 
 	renderLayout(props,state) {
+		console.log(this.constructor.defaultProps);
 		return Reflect.ownKeys(props.layout).map((sectionName,index) => {
 			return (
 				<div key={`${sectionName}-${index}`} className={`section-${sectionName}`}>

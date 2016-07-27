@@ -1,8 +1,6 @@
-export default class Brand extends React.Component {
-	render() {
-		console.log(this.props);
-		return (
-			<div>Brander</div>
-		);
-	}
+export default function Brand(props) {
+	console.log(props);
+	return (
+		<div>sdvsd</div>
+	);
 }

@@ -24,6 +24,15 @@
 					"color": "blue",
 					"famous": true
 				}
+			},
+			{
+				"id": "4",
+				"name": "brand",
+				"section": "header",
+				"props": {
+					"color": "red",
+					"famous": false
+				}
 			}
 		]
 	}

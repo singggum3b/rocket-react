@@ -31,6 +31,11 @@ function moduleResolver(name) {
 
 	return module;
 }
+
+function decorator(target) {
+	return target;
+}
+
 // =============================
 const syncRouteFactory = createSyncFactory({
 	siteMap: parsedSiteMap,
@@ -38,11 +43,9 @@ const syncRouteFactory = createSyncFactory({
 		return new Promise((resolve,reject) => {
 			const BareComponentClass = moduleResolver(name);
 			if (BareComponentClass) {
-				resolve(function (props) {
-					return (
-						<BareComponentClass {...Object.assign({},initProps,props)} />
-					);
-				});
+				BareComponentClass.defaultProps = Object.assign({}, BareComponentClass.defaultProps || {}, initProps);
+				console.log(initProps);
+				resolve(BareComponentClass);
 			} else {
 				reject();
 			}
@@ -59,7 +62,9 @@ const syncRouteFactory = createSyncFactory({
 
 const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=>{
 	return (
-		<Route key={routeObj.path} getComponent={syncRouteFactory.getTemplateClass(routeObj)}>
+		<Route path={routeObj.path}
+					 key={routeObj.path}
+					 getComponent={syncRouteFactory.getTemplateClass(routeObj)}>
 			<IndexRoute getComponents={syncRouteFactory.getIndexComponentList(routeObj)} />
 			{
 				routeObj.componentsList.map((cmp: Component) => {
@@ -74,10 +79,8 @@ const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=
 	)
 });
 
-console.log(routeList);
-
 ReactDOM.render((
-	<Router history={browserHistory}>
+	<Router history={browserHistory} >
 		{routeList}
 	</Router>
 ), document.getElementById("example"));

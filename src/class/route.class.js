@@ -12,9 +12,10 @@ export class Route<T: JSONRouteType> {
 	static getTemplateClass(
 		nextState: {location: Object}, routeObj: Route, resolver : ComponentResolverType
 	) {
+		const initProps =  Object.assign({}, routeObj.props, {layout: routeObj.layout});
 		return resolver({
 			name: routeObj.templateName,
-			initProps: Object.assign({}, routeObj.props, {layout: routeObj.layout}),
+			initProps,
 			type: this.COMPONENT_TYPES.TEMPLATE,
 		});
 	}
@@ -22,7 +23,7 @@ export class Route<T: JSONRouteType> {
 	static getIndexComponentList(
 		nextState: {location: Object}, routeObj: Route,resolver : ComponentResolverType
 	) {
-		const indexComponentList = routeObj.componentsList.filter((cmp) => !cmp.path);
+		const indexComponentList = routeObj.componentsList.filter((cmp) => !cmp.meta.path);
 		return this.__resolveComponentList(indexComponentList,routeObj,resolver);
 	}
 
@@ -44,7 +45,7 @@ export class Route<T: JSONRouteType> {
 		const promisedComponentList = componentList.map(
 			(cmp) => resolver({
 				name: cmp.name,
-				initProps: cmp.props,
+				initProps: cmp.meta.props,
 				type: this.COMPONENT_TYPES.COMPONENT,
 			}).catch((e) => undefined)
 		);
