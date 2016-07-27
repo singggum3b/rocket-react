@@ -6,7 +6,8 @@
 export type ComponentResolverType =
 	(params : {
 		name:string,
-		props: {[k:string]: Object}
+		initProps: {[k:string]: Object},
+		type: string,
 	}) => Promise<Function>;
 
 /**

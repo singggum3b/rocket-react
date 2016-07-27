@@ -12,15 +12,10 @@ export class Route<T: JSONRouteType> {
 	static getTemplateClass(
 		nextState: {location: Object}, routeObj: Route, resolver : ComponentResolverType
 	) {
-		return new Promise((resolve,reject) => {
-			resolver({
-				name: routeObj.templateName,
-				props: routeObj.props,
-				type: this.COMPONENT_TYPES.TEMPLATE,
-			}).then(
-				resolve,
-				reject
-			);
+		return resolver({
+			name: routeObj.templateName,
+			initProps: Object.assign({}, routeObj.props, {layout: routeObj.layout}),
+			type: this.COMPONENT_TYPES.TEMPLATE,
 		});
 	}
 
@@ -49,15 +44,17 @@ export class Route<T: JSONRouteType> {
 		const promisedComponentList = componentList.map(
 			(cmp) => resolver({
 				name: cmp.name,
-				props: cmp.props,
+				initProps: cmp.props,
 				type: this.COMPONENT_TYPES.COMPONENT,
 			}).catch((e) => undefined)
 		);
 		return Promise.all(promisedComponentList)
 			.then((result) => {
-				const rs = componentList.map(
-					(cmp,index) => ({[cmp.annotatedName]: result[index]})
+				const rs = componentList.reduce(
+					(obj,cmp,index) => (Object.assign(obj,{[cmp.annotatedName]: result[index]})),
+					{}
 				);
+				console.log(rs);
 				return Promise.resolve(rs);
 			});
 	}
@@ -77,11 +74,11 @@ export class Route<T: JSONRouteType> {
 		this.componentsList = tpl.componentsList.map(
 			(obj) => new Component(obj,this.path)
 		);
-		this.layout = tpl.componentsList
+		this.layout = this.componentsList
 			.reduce((result,cmp) => {
-				const {section,name} = cmp;
+				const {section, annotatedName} = cmp;
 				return Object.assign(result,{
-					[section]: result[section] ? result[section].concat(name) : [name],
+					[section]: result[section] ? result[section].concat(annotatedName) : [annotatedName],
 				});
 			},{});
 	}

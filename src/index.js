@@ -20,13 +20,25 @@ export function createSyncFactory(option: {
 		getTemplateClass(routeObj: Route) {
 			return function (nextState,cb) {
 				routeObj.constructor
-					.getTemplateClass(nextState,routeObj,option.componentResolver).then(cb);
+					.getTemplateClass(nextState,routeObj,option.componentResolver)
+					.then((res) => {
+						cb(null,res);
+					})
+					.catch((err) => {
+						cb(err,null);
+					});
 			};
 		},
 		getIndexComponentList(routeObj: Route) {
 			return function (nextState,cb) {
 				routeObj.constructor
-					.getIndexComponentList(nextState,routeObj,option.componentResolver).then(cb);
+					.getIndexComponentList(nextState,routeObj,option.componentResolver)
+					.then((res) => {
+						cb(null,res);
+					})
+					.catch((err) => {
+						cb(err,null);
+					});
 			};
 		},
 		getSubRouteComponentList(routeObj: Route,componentPath: string) {
@@ -37,7 +49,13 @@ export function createSyncFactory(option: {
 						routeObj,
 						option.componentResolver,
 						componentPath
-					).then(cb);
+					)
+					.then((res) => {
+						cb(null,res);
+					})
+					.catch((err) => {
+						cb(err,null);
+					});
 			};
 		},
 	};

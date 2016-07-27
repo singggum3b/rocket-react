@@ -20,13 +20,13 @@ const parsedSiteMap = fromJSON(sampleSitemap, JSONSiteMapType);
 // ============================
 console.log(new RouteClass(parsedRoute), parsedSiteMap);
 // ============================
-const customRequire = require.context("./components",false,/\.js$/);
 function moduleResolver(name) {
 	let module;
 	try {
-		module = customRequire(name);
+		module = require(`./components/${name}.js`).default;
 	} catch (e) {
-		console.log(`Cant resolve module : ${name}`);
+		console.log(`Cant resolve module :  ./components/${name}`);
+		console.warn(e);
 	}
 
 	return module;
@@ -34,18 +34,22 @@ function moduleResolver(name) {
 // =============================
 const syncRouteFactory = createSyncFactory({
 	siteMap: parsedSiteMap,
-	componentResolver({name,props}) {
+	componentResolver({name,initProps}) {
 		return new Promise((resolve,reject) => {
-			const module = moduleResolver(name);
-			if (module) {
-				resolve(module);
+			const BareComponentClass = moduleResolver(name);
+			if (BareComponentClass) {
+				resolve(function (props) {
+					return (
+						<BareComponentClass {...Object.assign({},initProps,props)} />
+					);
+				});
 			} else {
 				reject();
 			}
 		});
 	},
 	routeDataResolver(nextState) {
-		return new Promise((resolve,reject)=>{
+		return new Promise((resolve,reject) => {
 			resolve(sampleRoute);
 		});
 	},
@@ -58,7 +62,7 @@ const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=
 		<Route key={routeObj.path} getComponent={syncRouteFactory.getTemplateClass(routeObj)}>
 			<IndexRoute getComponents={syncRouteFactory.getIndexComponentList(routeObj)} />
 			{
-				routeObj.componentsList.map((cmp: Component)=> {
+				routeObj.componentsList.map((cmp: Component) => {
 					return (
 						<Route key={cmp.annotatedName}
 									 path={cmp.path}
@@ -71,6 +75,7 @@ const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=
 });
 
 console.log(routeList);
+
 ReactDOM.render((
 	<Router history={browserHistory}>
 		{routeList}
