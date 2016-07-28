@@ -70,3 +70,44 @@ export function createAsyncFactory(option: {
 } {
 
 }
+
+export function isReactPureComponent(componentClass) {
+	let isPure = false;
+
+	if (!!(componentClass.prototype.isReactComponent)) {
+		isPure = false;
+	} else {
+		try {
+			// Check if pure function of class
+			componentClass();
+			isPure = true;
+		} catch (e) {
+			isPure = false;
+		}
+	}
+	return isPure;
+}
+
+export function cloneReactClassWithProps(BareComponentClass, initProps) {
+	const isPure = isReactPureComponent(BareComponentClass);
+	if (isPure) {
+		const Component = function(props) {
+			return BareComponentClass(Object.assign(
+				{},
+				BareComponentClass.defaultProps,
+				initProps,props
+			));
+		};
+		Component.displayName = BareComponentClass.displayName;
+		return Component;
+	} else {
+		class Component extends BareComponentClass {
+			static displayName = BareComponentClass.displayName;
+			static defaultProps = Object.assign({}, BareComponentClass.defaultProps, initProps);
+			constructor(props, context) {
+				super(props, context);
+			}
+		}
+		return Component;
+	}
+}

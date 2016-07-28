@@ -1,6 +1,10 @@
-export default function Brand(props) {
+const Brand = function(props) {
 	console.log(props);
 	return (
 		<div>sdvsd</div>
 	);
-}
+};
+
+Brand.displayName = "Brand";
+
+export default Brand;
