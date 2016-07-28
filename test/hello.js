@@ -10,7 +10,7 @@ import {Component} from "../src/class/component.class";
 import type {JSONSiteMapType,JSONTemplateType} from "../src/type/json.type";
 import {createSyncFactory} from "../src";
 
-import {Route, Router, IndexRoute, browserHistory} from "react-router";
+import {Route, Router, IndexRoute, browserHistory, withRouter} from "react-router";
 
 const sampleRoute = require("./sampleRoute.json");
 const sampleSitemap = require("./sampleSiteMap.json");
@@ -42,9 +42,12 @@ const syncRouteFactory = createSyncFactory({
 	componentResolver({name,initProps}) {
 		return new Promise((resolve,reject) => {
 			const BareComponentClass = moduleResolver(name);
+			try {
+				console.log(Reflect.ownKeys(BareComponentClass.prototype));
+			} catch (e) {
+				console.log(e);
+			}
 			if (BareComponentClass) {
-				BareComponentClass.defaultProps = Object.assign({}, BareComponentClass.defaultProps || {}, initProps);
-				console.log(initProps);
 				resolve(BareComponentClass);
 			} else {
 				reject();
