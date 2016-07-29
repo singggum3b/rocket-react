@@ -58,19 +58,22 @@ const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=
 			<IndexRoute getComponents={syncRouteFactory.getIndexComponentList(routeObj)} />
 			{
 				routeObj.componentsList.map((cmp: Component) => {
-					return (
+					return cmp.path ? (
 						<Route key={cmp.annotatedName}
 									 path={cmp.path}
 									 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp.path)} />
-					);
+					) : null;
 				})
 			}
 		</Route>
 	)
 });
 
+console.log(routeList);
+
 ReactDOM.render((
 	<Router history={browserHistory} >
 		{routeList}
+		<Route path="*" component={(props)=>(<div>404 not found</div>)} />
 	</Router>
 ), document.getElementById("example"));

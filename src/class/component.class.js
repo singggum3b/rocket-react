@@ -7,7 +7,7 @@ export class Component<T: JSONComponentType> {
 	name: string;
 	section: string;
 	type = "component";
-	path: string;
+	path: string | void;
 	parentPath: string;
 	annotatedName: string;
 
@@ -16,10 +16,8 @@ export class Component<T: JSONComponentType> {
 		this.section = cmp.section;
 		this.name = cmp.name;
 		this.parentPath = parentPath || "/";
-		this.path = cmp.path || this.parentPath;
+		this.path = cmp.path || undefined;
 		this.annotatedName = `${cmp.section}@${cmp.name}@${cmp.id}`;
 	}
-
-	getComponentClass() {}
 
 }

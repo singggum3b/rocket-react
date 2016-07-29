@@ -31,7 +31,7 @@ export class Route<T: JSONRouteType> {
 		nextState: {location: Object},
 		routeObj: Route<T>,
 		resolver : ComponentResolverType,
-		componentPath: string
+		componentPath: string | void
 	) {
 		const matchedComponentList = routeObj.componentsList.filter(
 			(cmp) => cmp.path === componentPath

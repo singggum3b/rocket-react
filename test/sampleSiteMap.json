@@ -18,8 +18,19 @@
 				}
 			},
 			{
+				"id": "5",
+				"type": "component",
+				"path": "brand/logo",
+				"name": "logo",
+				"section": "header",
+				"props": {
+					"color": "red"
+				}
+			},
+			{
 				"id": "3",
 				"type": "component",
+				"path": "brand",
 				"name": "brand",
 				"section": "header",
 				"props": {

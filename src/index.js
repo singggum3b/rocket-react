@@ -41,7 +41,7 @@ export function createSyncFactory(option: {
 					});
 			};
 		},
-		getSubRouteComponentList(routeObj: Route<JSONRouteType>,componentPath: string) {
+		getSubRouteComponentList(routeObj: Route<JSONRouteType>,componentPath: string | void) {
 			return function (nextState,cb) {
 				routeObj.constructor
 					.getSubRouteComponentList(
