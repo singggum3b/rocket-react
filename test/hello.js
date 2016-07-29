@@ -8,7 +8,7 @@ import fromJSON from "tcomb/lib/fromJSON";
 import {Route as RouteClass} from "../src/class/route.class";
 import {Component} from "../src/class/component.class";
 import type {JSONSiteMapType,JSONTemplateType} from "../src/type/json.type";
-import {createSyncFactory} from "../src";
+import {createSyncFactory, isReactPureComponent, cloneReactClassWithProps} from "../src";
 
 import {Route, Router, IndexRoute, browserHistory, withRouter} from "react-router";
 
@@ -32,26 +32,13 @@ function moduleResolver(name) {
 	return module;
 }
 
-function decorator(target) {
-	return target;
-}
-
 // =============================
 const syncRouteFactory = createSyncFactory({
 	siteMap: parsedSiteMap,
 	componentResolver({name,initProps}) {
 		return new Promise((resolve,reject) => {
 			const BareComponentClass = moduleResolver(name);
-			try {
-				console.log(Reflect.ownKeys(BareComponentClass.prototype));
-			} catch (e) {
-				console.log(e);
-			}
-			if (BareComponentClass) {
-				resolve(BareComponentClass);
-			} else {
-				reject();
-			}
+			resolve(cloneReactClassWithProps(BareComponentClass,initProps));
 		});
 	},
 	routeDataResolver(nextState) {

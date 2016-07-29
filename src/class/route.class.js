@@ -55,7 +55,6 @@ export class Route<T: JSONRouteType> {
 					(obj,cmp,index) => (Object.assign(obj,{[cmp.annotatedName]: result[index]})),
 					{}
 				);
-				console.log(rs);
 				return Promise.resolve(rs);
 			});
 	}

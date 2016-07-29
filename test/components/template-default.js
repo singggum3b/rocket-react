@@ -1,5 +1,6 @@
 export default class TemplateDefault extends React.Component {
 
+	static displayName = "TemplateDefault";
 	renderLayout(props,state) {
 		console.log(this.constructor.defaultProps);
 		return Reflect.ownKeys(props.layout).map((sectionName,index) => {
