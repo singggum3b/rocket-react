@@ -6,6 +6,7 @@ export class Component<T: JSONComponentType> {
 	meta: T;
 	name: string;
 	section: string;
+	type = "component";
 	path: string;
 	parentPath: string;
 	annotatedName: string;

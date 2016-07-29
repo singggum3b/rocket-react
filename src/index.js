@@ -1,6 +1,7 @@
 // @flow
 
 import fromJSON from "tcomb/lib/fromJSON";
+import type {Class} from "./type/common.type.js";
 import type {JSONSiteMapType,JSONRouteType} from "./type/json.type";
 import type {ComponentResolverType,RouteDataResolverType} from "./type/factoryOption.type";
 import type {TemplateResolverType,ComponentListResolverType} from "./type/factoryOutput.type";
@@ -12,12 +13,11 @@ export function createSyncFactory(option: {
 	componentResolver: ComponentResolverType,
 	routeDataResolver: RouteDataResolverType,
 }): {
-	siteMap: SiteMap,
+	siteMap: SiteMap<JSONSiteMapType>,
 } {
-	const siteMap = option.siteMap ? new SiteMap(option.siteMap) : undefined;
 	return {
-		siteMap,
-		getTemplateClass(routeObj: Route) {
+		siteMap: new SiteMap(option.siteMap),
+		getTemplateClass(routeObj: Route<JSONRouteType>) {
 			return function (nextState,cb) {
 				routeObj.constructor
 					.getTemplateClass(nextState,routeObj,option.componentResolver)
@@ -29,7 +29,7 @@ export function createSyncFactory(option: {
 					});
 			};
 		},
-		getIndexComponentList(routeObj: Route) {
+		getIndexComponentList(routeObj: Route<JSONRouteType>) {
 			return function (nextState,cb) {
 				routeObj.constructor
 					.getIndexComponentList(nextState,routeObj,option.componentResolver)
@@ -41,7 +41,7 @@ export function createSyncFactory(option: {
 					});
 			};
 		},
-		getSubRouteComponentList(routeObj: Route,componentPath: string) {
+		getSubRouteComponentList(routeObj: Route<JSONRouteType>,componentPath: string) {
 			return function (nextState,cb) {
 				routeObj.constructor
 					.getSubRouteComponentList(
@@ -61,17 +61,15 @@ export function createSyncFactory(option: {
 	};
 }
 
-export function createAsyncFactory(option: {
+/*export function createAsyncFactory(option: {
 	componentResolver: ComponentResolverType,
 	routeDataResolver: RouteDataResolverType,
 }): {
 	templateResolver: TemplateResolverType,
 	componentListResolver: ComponentListResolverType
-} {
+} {}*/
 
-}
-
-export function isReactPureComponent(componentClass) {
+export function isReactPureComponent(componentClass: Function) {
 	let isPure = false;
 
 	if (!!(componentClass.prototype.isReactComponent)) {
@@ -88,10 +86,10 @@ export function isReactPureComponent(componentClass) {
 	return isPure;
 }
 
-export function cloneReactClassWithProps(BareComponentClass, initProps) {
-	const isPure = isReactPureComponent(BareComponentClass);
+export function cloneReactClassWithProps(BareComponentClass: Class<any>, initProps: Object) {
+	const isPure = isReactPureComponent((BareComponentClass : Class<any>));
 	if (isPure) {
-		const Component = function(props) {
+		const Component = function(props: Object) {
 			return BareComponentClass(Object.assign(
 				{},
 				BareComponentClass.defaultProps,
@@ -104,7 +102,7 @@ export function cloneReactClassWithProps(BareComponentClass, initProps) {
 		class Component extends BareComponentClass {
 			static displayName = BareComponentClass.displayName;
 			static defaultProps = Object.assign({}, BareComponentClass.defaultProps, initProps);
-			constructor(props, context) {
+			constructor(props: Object, context: Object) {
 				super(props, context);
 			}
 		}

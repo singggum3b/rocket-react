@@ -5,7 +5,7 @@ import {Route} from "./route.class";
 export class SiteMap<T : JSONSiteMapType> {
 
 	meta : T;
-	routeList : Array<Route>;
+	routeList : Array<Route<*>>;
 
 	constructor(sitemap: T) {
 		this.meta = sitemap;
