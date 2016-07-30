@@ -4,7 +4,9 @@ module.exports = {
 	entry: ["./test/hello.js"],
 	watch: true,
 	output: {
-		filename: "./dist/bundle.js",
+		filename: "bundle.js",
+		path: "./dist",
+		publicPath: "/"
 	},
 	// Enable sourcemaps for debugging webpack's output.
 	devtool: "source-map",

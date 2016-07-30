@@ -1,8 +1,9 @@
 [
 	{
+		"name": "HomePage",
 		"templateName": "template-default",
 		"color": "red",
-		"path" : "/",
+		"path" : "/product",
 		"props": {
 			"color": "blue"
 		},
@@ -10,19 +11,17 @@
 			{
 				"id": "1",
 				"type": "component",
-				"path": "logo",
-				"name": "logo",
+				"name": "top-menu",
 				"section": "header",
 				"props": {
 					"color": "red"
 				}
 			},
 			{
-				"id": "5",
+				"id": "2",
 				"type": "component",
-				"path": "brand/logo",
-				"name": "logo",
-				"section": "header",
+				"name": "side-menu",
+				"section": "body",
 				"props": {
 					"color": "red"
 				}
@@ -30,23 +29,62 @@
 			{
 				"id": "3",
 				"type": "component",
-				"path": "brand",
-				"name": "brand",
-				"section": "header",
+				"name": "product-list",
+				"section": "body",
 				"props": {
-					"color": "blue",
-					"famous": true
+					"color": "red"
 				}
 			},
 			{
 				"id": "4",
+				"path": ":id/review",
 				"type": "component",
-				"name": "brand",
+				"name": "product-review",
 				"section": "header",
 				"props": {
-					"color": "red",
-					"famous": false
+					"color": "red"
 				}
+			},
+			{
+				"id": "5",
+				"path": ":id",
+				"exactPath": true,
+				"type": "component",
+				"name": "product-detail",
+				"section": "body",
+				"props": {
+					"color": "red"
+				}
+			},
+			{
+				"id": "6",
+				"path": ":id/combo",
+				"type": "component",
+				"name": "template-layout-only",
+				"section": "header",
+				"props": {
+					"layoutName": "side-by-side"
+				},
+				"componentsList": [
+					{
+						"id": "7",
+						"type": "component",
+						"name": "product-detail",
+						"section": "header",
+						"props": {
+							"color": "red"
+						}
+					},
+					{
+						"id": "8",
+						"type": "component",
+						"name": "product-review",
+						"section": "header",
+						"props": {
+							"color": "red"
+						}
+					}
+				]
 			}
 		]
 	}

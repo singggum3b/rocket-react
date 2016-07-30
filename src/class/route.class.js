@@ -9,6 +9,7 @@ export class Route<T: JSONRouteType> {
 		TEMPLATE: "template",
 		COMPONENT: "component",
 	};
+
 	static getTemplateClass(
 		nextState: {location: Object}, routeObj: Route<T>, resolver : ComponentResolverType
 	) {
@@ -31,13 +32,17 @@ export class Route<T: JSONRouteType> {
 		nextState: {location: Object},
 		routeObj: Route<T>,
 		resolver : ComponentResolverType,
-		componentPath: string | void
+		component: Component<JSONComponentType>
 	) {
-		const matchedComponentList = routeObj.componentsList.filter(
-			(cmp) => cmp.path === componentPath
+		const componentList = routeObj.componentsList.filter(
+			(cmp) => {
+				const isSame = isPathSameRoot(nextState.location.pathname,cmp.fullPath);
+				if (cmp.exactPath) {
+					return (isSame.sameRoot && isSame.sameLength);
+				}
+				return isSame.sameRoot;
+			}
 		);
-		const indexComponentList = routeObj.componentsList.filter((cmp) => !cmp.path);
-		const componentList = matchedComponentList.concat(indexComponentList);
 		return this.__resolveComponentList(componentList,routeObj,resolver);
 	}
 
@@ -83,4 +88,15 @@ export class Route<T: JSONRouteType> {
 			},{});
 	}
 
+}
+
+function isPathSameRoot(source,target) {
+	const sourceArray = source.split("/");
+	const targetArray = target.split("/");
+	return {
+		sameRoot: targetArray.every((fragment,index) => (
+			fragment === sourceArray[index] || fragment.includes(":")
+		)),
+		sameLength: sourceArray.length === targetArray.length,
+	};
 }

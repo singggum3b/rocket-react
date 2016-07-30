@@ -8,9 +8,9 @@ import fromJSON from "tcomb/lib/fromJSON";
 import {Route as RouteClass} from "../src/class/route.class";
 import {Component} from "../src/class/component.class";
 import type {JSONSiteMapType,JSONTemplateType} from "../src/type/json.type";
-import {createSyncFactory, isReactPureComponent, cloneReactClassWithProps} from "../src";
+import {createSyncFactory, cloneReactClassWithProps} from "../src";
 
-import {Route, Router, IndexRoute, browserHistory, withRouter} from "react-router";
+import {Route, Router, IndexRoute, browserHistory} from "react-router";
 
 const sampleRoute = require("./sampleRoute.json");
 const sampleSitemap = require("./sampleSiteMap.json");
@@ -50,7 +50,7 @@ const syncRouteFactory = createSyncFactory({
 
 // =====================================
 
-const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=>{
+const dynamicRouteList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=>{
 	return (
 		<Route path={routeObj.path}
 					 key={routeObj.path}
@@ -61,19 +61,20 @@ const routeList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=
 					return cmp.path ? (
 						<Route key={cmp.annotatedName}
 									 path={cmp.path}
-									 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp.path)} />
+									 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp)} />
 					) : null;
 				})
 			}
 		</Route>
-	)
+	);
 });
 
-console.log(routeList);
+const staticRouteList = [
+	<Route key="404" path="*" component={()=>(<div>404 not found</div>)}></Route>,
+];
 
 ReactDOM.render((
 	<Router history={browserHistory} >
-		{routeList}
-		<Route path="*" component={(props)=>(<div>404 not found</div>)} />
+		{dynamicRouteList.concat(staticRouteList)}
 	</Router>
 ), document.getElementById("example"));

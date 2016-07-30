@@ -7,6 +7,7 @@ import type {ComponentResolverType,RouteDataResolverType} from "./type/factoryOp
 import type {TemplateResolverType,ComponentListResolverType} from "./type/factoryOutput.type";
 import {SiteMap} from "./class/sitemap.class";
 import {Route} from "./class/route.class";
+import {Component} from "./class/component.class";
 
 export function createSyncFactory(option: {
 	siteMap: JSONSiteMapType,
@@ -41,14 +42,14 @@ export function createSyncFactory(option: {
 					});
 			};
 		},
-		getSubRouteComponentList(routeObj: Route<JSONRouteType>,componentPath: string | void) {
+		getSubRouteComponentList(routeObj: Route<JSONRouteType>,component: Component<*>) {
 			return function (nextState,cb) {
 				routeObj.constructor
 					.getSubRouteComponentList(
 						nextState,
 						routeObj,
 						option.componentResolver,
-						componentPath
+						component
 					)
 					.then((res) => {
 						cb(null,res);

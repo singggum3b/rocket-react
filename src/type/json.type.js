@@ -7,6 +7,7 @@ export type JSONComponentType = {
 	name: string,
 	path?: string,
 	section: string,
+	exactPath?: boolean,
 	type: "component" | "flowComponent",
 	props: {
 		[name: string]: any
@@ -14,6 +15,7 @@ export type JSONComponentType = {
 }
 
 export type JSONRouteType = {
+	path: string,
 	templateName: string,
 	componentsList: Array<JSONComponentType>,
 	props: {
