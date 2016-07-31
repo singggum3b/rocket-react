@@ -1,5 +1,5 @@
 // @flow
-import type {JSONRouteType,JSONComponentType} from "../type/json.type";
+import type {JSONRouteType,JSONComponentType,JSONReplacementComponentType} from "../type/json.type";
 import type {ComponentResolverType,RouteDataResolverType} from "../type/factoryOption.type";
 import {Component} from "./component.class";
 
@@ -32,17 +32,61 @@ export class Route<T: JSONRouteType> {
 		nextState: {location: Object},
 		routeObj: Route<T>,
 		resolver : ComponentResolverType,
-		component: Component<JSONComponentType>
+		component: Component<JSONComponentType>,
+		excludedComponent?: JSONReplacementComponentType,
 	) {
-		const componentList = routeObj.componentsList.filter(
+		let componentList = routeObj.componentsList.filter(
 			(cmp) => {
-				const isSame = isPathSameRoot(nextState.location.pathname,cmp.fullPath);
+				//=================
+				let isSame = false;
+				// ==================
+				// I check if component path is out of root - decouple path and UI
+				if (component.path && component.path.indexOf("/") === 0) {
+					isSame = isPathSameRoot(`${component.parentPath}${component.path}`,cmp.fullPath);
+					//console.log(`${component.parentPath}${component.path}`,cmp.fullPath);
+					//console.log(isSame);
+					if (cmp.exactPath) {
+						const isSameInJSON = isPathSameRoot(nextState.location.pathname,cmp.fullPath);
+						return (
+							(isSame.sameRoot && isSame.sameLength)
+							&& (isSameInJSON.sameRoot && isSameInJSON.sameLength)
+						);
+					}
+					return isSame.sameRoot || (cmp === component);
+				}
+				// ======================
+				isSame = isPathSameRoot(nextState.location.pathname,cmp.fullPath);
 				if (cmp.exactPath) {
+					//console.log(nextState.location.pathname,cmp.fullPath);
 					return (isSame.sameRoot && isSame.sameLength);
 				}
+
 				return isSame.sameRoot;
 			}
 		);
+		// ======================
+		if (excludedComponent) {
+			// I replace excluded component with provided one
+			componentList = componentList.map((cmp) => {
+				const isExcluded = cmp.isExcluded(component);
+				if (isExcluded) {
+					const excludedProps = Object.assign({
+						exludedBy: component,
+					},excludedComponent.props);
+					return new Component(Object.assign({},
+						cmp.meta,
+						excludedComponent,
+						{props: excludedProps}
+					),cmp.parentPath);
+				}
+				return cmp;
+			});
+		} else {
+			// I filter excluded components
+			componentList = componentList.filter((cmp) => {
+				return !cmp.isExcluded(component);
+			});
+		}
 		return this.__resolveComponentList(componentList,routeObj,resolver);
 	}
 

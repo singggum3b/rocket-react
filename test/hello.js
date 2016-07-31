@@ -7,14 +7,14 @@ import "babel-polyfill";
 import fromJSON from "tcomb/lib/fromJSON";
 import {Route as RouteClass} from "../src/class/route.class";
 import {Component} from "../src/class/component.class";
-import type {JSONSiteMapType,JSONTemplateType} from "../src/type/json.type";
+import type {JSONSiteMapType, JSONRouteType} from "../src/type/json.type";
 import {createSyncFactory, cloneReactClassWithProps} from "../src";
 
 import {Route, Router, IndexRoute, browserHistory} from "react-router";
 
 const sampleRoute = require("./sampleRoute.json");
 const sampleSitemap = require("./sampleSiteMap.json");
-const parsedRoute = fromJSON(sampleRoute, JSONTemplateType);
+const parsedRoute = fromJSON(sampleRoute, JSONRouteType);
 const parsedSiteMap = fromJSON(sampleSitemap, JSONSiteMapType);
 
 // ============================
@@ -46,9 +46,36 @@ const syncRouteFactory = createSyncFactory({
 			resolve(sampleRoute);
 		});
 	},
+
 });
 
 // =====================================
+
+function renderComponentList(routeObj) {
+	return routeObj.componentsList.map((cmp: Component) => {
+		if (cmp.componentsList) {
+			return (
+				<Route key={cmp.annotatedName}
+							 path={cmp.path}
+							 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp)} >
+					{
+						renderComponentList({componentsList : cmp.componentsList})
+					}
+				</Route>
+			);
+		}
+
+		if (cmp.path) {
+			return (
+				<Route key={cmp.annotatedName}
+							 path={cmp.path}
+							 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp)} />
+			);
+		}
+
+		return false;
+	}).filter(Boolean);
+}
 
 const dynamicRouteList = syncRouteFactory.siteMap.routeList.map((routeObj: RouteClass)=>{
 	return (
@@ -57,13 +84,7 @@ const dynamicRouteList = syncRouteFactory.siteMap.routeList.map((routeObj: Route
 					 getComponent={syncRouteFactory.getTemplateClass(routeObj)}>
 			<IndexRoute getComponents={syncRouteFactory.getIndexComponentList(routeObj)} />
 			{
-				routeObj.componentsList.map((cmp: Component) => {
-					return cmp.path ? (
-						<Route key={cmp.annotatedName}
-									 path={cmp.path}
-									 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp)} />
-					) : null;
-				})
+				renderComponentList(routeObj)
 			}
 		</Route>
 	);

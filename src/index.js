@@ -2,7 +2,11 @@
 
 import fromJSON from "tcomb/lib/fromJSON";
 import type {Class} from "./type/common.type.js";
-import type {JSONSiteMapType,JSONRouteType} from "./type/json.type";
+import type {
+	JSONSiteMapType,
+	JSONRouteType,
+	JSONComponentType,
+	JSONReplacementComponentType } from "./type/json.type";
 import type {ComponentResolverType,RouteDataResolverType} from "./type/factoryOption.type";
 import type {TemplateResolverType,ComponentListResolverType} from "./type/factoryOutput.type";
 import {SiteMap} from "./class/sitemap.class";
@@ -13,6 +17,7 @@ export function createSyncFactory(option: {
 	siteMap: JSONSiteMapType,
 	componentResolver: ComponentResolverType,
 	routeDataResolver: RouteDataResolverType,
+	excludedComponent?: JSONReplacementComponentType,
 }): {
 	siteMap: SiteMap<JSONSiteMapType>,
 } {
@@ -49,7 +54,8 @@ export function createSyncFactory(option: {
 						nextState,
 						routeObj,
 						option.componentResolver,
-						component
+						component,
+						option.excludedComponent,
 					)
 					.then((res) => {
 						cb(null,res);
@@ -71,20 +77,7 @@ export function createSyncFactory(option: {
 } {}*/
 
 export function isReactPureComponent(componentClass: Function) {
-	let isPure = false;
-
-	if (!!(componentClass.prototype.isReactComponent)) {
-		isPure = false;
-	} else {
-		try {
-			// Check if pure function of class
-			componentClass();
-			isPure = true;
-		} catch (e) {
-			isPure = false;
-		}
-	}
-	return isPure;
+	return !(componentClass.prototype.isReactComponent);
 }
 
 export function cloneReactClassWithProps(BareComponentClass: Class<any>, initProps: Object) {
@@ -97,6 +90,7 @@ export function cloneReactClassWithProps(BareComponentClass: Class<any>, initPro
 				initProps,props
 			));
 		};
+		Component.propTypes = BareComponentClass.propTypes;
 		Component.displayName = BareComponentClass.displayName;
 		return Component;
 	} else {

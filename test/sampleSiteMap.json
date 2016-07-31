@@ -48,10 +48,21 @@
 			{
 				"id": "5",
 				"path": ":id",
-				"exactPath": true,
 				"type": "component",
 				"name": "product-detail",
 				"section": "body",
+				"props": {
+					"color": "red"
+				}
+			},
+			{
+				"id": "9",
+				"path": "/product-review",
+				"type": "component",
+				"excludedId": ["3"],
+				"excludedName": ["side-menu", "product-detail"],
+				"name": "product-review",
+				"section": "header",
 				"props": {
 					"color": "red"
 				}

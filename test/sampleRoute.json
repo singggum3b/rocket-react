@@ -1,5 +1,6 @@
 {
 	"templateName": "template-default",
+	"path": "/",
 	"props": {
 		"color": "blue"
 	},
