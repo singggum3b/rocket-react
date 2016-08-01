@@ -40,6 +40,13 @@ export class Component<T: JSONComponentType> {
 			this.componentsList = cmp.componentsList.map(
 				(obj) => new Component(obj,this.fullPath)
 			);
+			this.layout = this.componentsList
+				.reduce((result,cmp) => {
+					const {section, annotatedName} = cmp;
+					return Object.assign(result,{
+						[section]: result[section] ? result[section].concat(annotatedName) : [annotatedName],
+					});
+				},{});
 		}
 		this.excludedId = cmp.excludedId;
 		this.excludedName = cmp.excludedName;
@@ -47,10 +54,7 @@ export class Component<T: JSONComponentType> {
 
 	isExcluded(cmp: Component<*>) {
 		return [["excludedId","id"],["excludedName","name"],["excludedPath","path"]]
-			.some((property) => {
-				//console.log(cmp[property[0]],this[property[1]]);
-				return excludeByArray(cmp[property[0]],this[property[1]]);
-			});
+			.some((property) => excludeByArray(cmp[property[0]],this[property[1]]));
 	}
 
 }

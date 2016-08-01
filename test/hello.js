@@ -59,7 +59,7 @@ function renderComponentList(routeObj) {
 							 path={cmp.path}
 							 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp)} >
 					{
-						renderComponentList({componentsList : cmp.componentsList})
+						renderComponentList({componentsList: cmp.componentsList})
 					}
 				</Route>
 			);

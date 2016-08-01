@@ -94,7 +94,7 @@ export class Route<T: JSONRouteType> {
 		const promisedComponentList = componentList.map(
 			(cmp) => resolver({
 				name: cmp.name,
-				initProps: cmp.meta.props,
+				initProps: Object.assign({}, cmp.meta.props,{layout: cmp.layout}),
 				type: this.COMPONENT_TYPES.COMPONENT,
 			}).catch((e) => undefined)
 		);

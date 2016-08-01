@@ -3,7 +3,7 @@ export default class TemplateLayoutOnly extends React.Component {
 	static displayName = "TemplateLayoutOnly";
 	renderLayout(props,state) {
 		console.log(this.constructor.defaultProps);
-		return Reflect.ownKeys(props.layout).map((sectionName,index) => {
+		return props.layout ? Reflect.ownKeys(props.layout).map((sectionName,index) => {
 			return (
 				<div key={`${sectionName}-${index}`} className={`section-${sectionName}`}>
 					{
@@ -11,7 +11,7 @@ export default class TemplateLayoutOnly extends React.Component {
 					}
 				</div>
 			);
-		});
+		}) : null;
 	}
 
 	buildComponent(props,state) {
