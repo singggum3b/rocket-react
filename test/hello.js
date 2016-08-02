@@ -57,7 +57,8 @@ function renderComponentList(routeObj) {
 			return (
 				<Route key={cmp.annotatedName}
 							 path={cmp.path}
-							 getComponents={syncRouteFactory.getSubRouteComponentList(routeObj,cmp)} >
+							 getComponents={syncRouteFactory.getTemplateClass(cmp,routeObj)} >
+					<IndexRoute getComponents={syncRouteFactory.getIndexComponentList(cmp)} />
 					{
 						renderComponentList({componentsList: cmp.componentsList})
 					}

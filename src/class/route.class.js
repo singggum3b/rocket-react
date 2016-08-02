@@ -11,18 +11,26 @@ export class Route<T: JSONRouteType> {
 	};
 
 	static getTemplateClass(
-		nextState: {location: Object}, routeObj: Route<T>, resolver : ComponentResolverType
+		nextState: {location: Object},
+		routeObj: Route<T> | Component<JSONComponentType>,
+		resolver: ComponentResolverType
 	) {
 		const initProps =  Object.assign({}, routeObj.meta.props, {layout: routeObj.layout});
-		return resolver({
-			name: routeObj.templateName,
+		const templatePromise = resolver({
+			name: routeObj.name,
 			initProps,
 			type: this.COMPONENT_TYPES.TEMPLATE,
 		});
+		if (routeObj.parentPath) {
+			return templatePromise.then((cmp) => {
+				return {[routeObj.annotatedName]: cmp};
+			})
+		}
+		return templatePromise;
 	}
 
 	static getIndexComponentList(
-		nextState: {location: Object}, routeObj: Route<T>,resolver : ComponentResolverType
+		nextState: {location: Object}, routeObj: Route<T> | Component<JSONComponentType>,resolver : ComponentResolverType
 	) {
 		const indexComponentList = routeObj.componentsList.filter((cmp) => !cmp.meta.path);
 		return this.__resolveComponentList(indexComponentList,routeObj,resolver);
@@ -30,7 +38,7 @@ export class Route<T: JSONRouteType> {
 
 	static getSubRouteComponentList(
 		nextState: {location: Object},
-		routeObj: Route<T>,
+		routeObj: Route<T> | Component<JSONComponentType>,
 		resolver : ComponentResolverType,
 		component: Component<JSONComponentType>,
 		excludedComponent?: JSONReplacementComponentType,
@@ -94,7 +102,7 @@ export class Route<T: JSONRouteType> {
 		const promisedComponentList = componentList.map(
 			(cmp) => resolver({
 				name: cmp.name,
-				initProps: Object.assign({}, cmp.meta.props,{layout: cmp.layout}),
+				initProps: Object.assign({}, cmp.meta.props,cmp.layout && {layout: cmp.layout}),
 				type: this.COMPONENT_TYPES.COMPONENT,
 			}).catch((e) => undefined)
 		);
@@ -104,12 +112,13 @@ export class Route<T: JSONRouteType> {
 					(obj,cmp,index) => (Object.assign(obj,{[cmp.annotatedName]: result[index]})),
 					{}
 				);
+				console.log(rs);
 				return Promise.resolve(rs);
 			});
 	}
 
 	meta: T;
-	templateName: string;
+	name: string;
 	path: string;
 	componentsList: Array<Component<*>>;
 	layout: {
@@ -118,7 +127,7 @@ export class Route<T: JSONRouteType> {
 
 	constructor(tpl: T) {
 		this.meta = tpl;
-		this.templateName = tpl.templateName;
+		this.name = tpl.name;
 		this.path = tpl.path || "/";
 		this.componentsList = tpl.componentsList.map(
 			(obj) => new Component(obj,this.path)

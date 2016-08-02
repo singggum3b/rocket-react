@@ -16,7 +16,7 @@ export default class TemplateDefault extends React.Component {
 
 	buildComponent(props,state) {
 		return (
-			<div>
+			<div className="template-default">
 				<h1>Hello</h1>
 				{
 					this.renderLayout(props, state)

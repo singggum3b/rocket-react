@@ -16,7 +16,7 @@ export default class TemplateLayoutOnly extends React.Component {
 
 	buildComponent(props,state) {
 		return (
-			<div>
+			<div className="template-layout-only">
 				<h1>Hello TemplateLayoutOnly</h1>
 				{
 					this.renderLayout(props, state)

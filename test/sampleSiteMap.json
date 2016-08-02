@@ -1,15 +1,13 @@
 [
 	{
-		"name": "HomePage",
-		"templateName": "template-default",
-		"color": "red",
+		"name": "template-default",
 		"path" : "/product",
 		"props": {
 			"color": "blue"
 		},
 		"componentsList": [
 			{
-				"id": "1",
+				"id": "topmenu",
 				"type": "component",
 				"name": "top-menu",
 				"section": "header",
@@ -18,7 +16,7 @@
 				}
 			},
 			{
-				"id": "2",
+				"id": "sidemenu",
 				"type": "component",
 				"name": "side-menu",
 				"section": "body",
@@ -96,6 +94,30 @@
 						}
 					}
 				]
+			}
+		]
+	},
+	{
+		"name": "template-default",
+		"path" : "/service",
+		"props": {
+			"color": "red"
+		},
+		"componentsList": [
+			{
+				"cloneID": "topmenu"
+			},
+			{
+				"cloneID": "sidemenu"
+			},
+			{
+				"id": "service-product-detail",
+				"type": "component",
+				"name": "product-detail",
+				"section": "header",
+				"props": {
+					"color": "red"
+				}
 			}
 		]
 	}

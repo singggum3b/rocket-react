@@ -23,21 +23,33 @@ export function createSyncFactory(option: {
 } {
 	return {
 		siteMap: new SiteMap(option.siteMap),
-		getTemplateClass(routeObj: Route<JSONRouteType>) {
+		getTemplateClass(
+			routeObj: Route<JSONRouteType> | Component<JSONComponentType>,
+			parentRouteObj?: Route<JSONRouteType> | Component<JSONComponentType>
+		) {
 			return function (nextState,cb) {
-				routeObj.constructor
-					.getTemplateClass(nextState,routeObj,option.componentResolver)
-					.then((res) => {
-						cb(null,res);
+				if (parentRouteObj) {
+					Promise.all([
+						Route.getTemplateClass(nextState,routeObj,option.componentResolver).catch(e => console.error(e)),
+						Route.getIndexComponentList(nextState,parentRouteObj,option.componentResolver).catch(e => console.error(e)),
+					]).then((resultList) => {
+						cb(null,Object.assign({},resultList[0],resultList[1]));
 					})
-					.catch((err) => {
-						cb(err,null);
-					});
+				} else {
+					Route
+						.getTemplateClass(nextState,routeObj,option.componentResolver,parentRouteObj)
+						.then((res) => {
+							cb(null,res);
+						})
+						.catch((err) => {
+							cb(err,null);
+						});
+				}
 			};
 		},
-		getIndexComponentList(routeObj: Route<JSONRouteType>) {
+		getIndexComponentList(routeObj: Route<JSONRouteType> | Component<JSONComponentType>) {
 			return function (nextState,cb) {
-				routeObj.constructor
+				Route
 					.getIndexComponentList(nextState,routeObj,option.componentResolver)
 					.then((res) => {
 						cb(null,res);
@@ -47,9 +59,9 @@ export function createSyncFactory(option: {
 					});
 			};
 		},
-		getSubRouteComponentList(routeObj: Route<JSONRouteType>,component: Component<*>) {
+		getSubRouteComponentList(routeObj: Route<JSONRouteType> | Component<JSONComponentType>,component: Component<*>) {
 			return function (nextState,cb) {
-				routeObj.constructor
+				Route
 					.getSubRouteComponentList(
 						nextState,
 						routeObj,

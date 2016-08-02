@@ -18,6 +18,15 @@ export type JSONComponentType = {
 	componentsList?: Array<JSONComponentType>,
 }
 
+export type JSONCloneComponentType = {
+	cloneID: string | number,
+	props?: {
+		[name: string]: any
+	},
+	excludedId?: Array<string | boolean>,
+	excludedName?: Array<string>,
+}
+
 export type JSONReplacementComponentType = {
 	name: string,
 	props: {
@@ -27,7 +36,7 @@ export type JSONReplacementComponentType = {
 
 export type JSONRouteType = {
 	path: string,
-	templateName: string,
+	name: string,
 	props: {
 		[name: string]: any
 	},
