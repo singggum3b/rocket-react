@@ -14,11 +14,8 @@ import {Route, Router, IndexRoute, browserHistory} from "react-router";
 
 const sampleRoute = require("./sampleRoute.json");
 const sampleSitemap = require("./sampleSiteMap.json");
-const parsedRoute = fromJSON(sampleRoute, JSONRouteType);
-const parsedSiteMap = fromJSON(sampleSitemap, JSONSiteMapType);
+const parsedSiteMap = fromJSON(sampleSitemap,JSONSiteMapType);
 
-// ============================
-console.log(new RouteClass(parsedRoute), parsedSiteMap);
 // ============================
 function moduleResolver(name) {
 	let module;

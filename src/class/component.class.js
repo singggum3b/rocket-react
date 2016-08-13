@@ -1,5 +1,6 @@
 // @flow
-import type {JSONComponentType} from "../type/json.type";
+import type { JSONComponentType, JSONComponentListType } from "../type/json.type";
+import { default as mergeOptions } from "merge-options";
 
 export class Component<T: JSONComponentType> {
 
@@ -8,6 +9,26 @@ export class Component<T: JSONComponentType> {
 			console.warn(cmp);
 			throw new Error("Inefficient usage of component : Same path for child and parent.");
 		}
+	}
+
+	static generateComponentList(
+		componentsList: Array<JSONComponentListType>,
+		parentPath: string,
+		componentIndex
+	) {
+		return componentsList.map(
+			(obj) => {
+				if (obj.cloneID) {
+					let cloneSourceComponent = getCloneMergedComponent(componentIndex, obj.cloneID);
+					if (cloneSourceComponent) {
+						cloneSourceComponent = mergeOptions(cloneSourceComponent,obj);
+						return new Component(cloneSourceComponent, parentPath, componentIndex);
+					}
+					return false;
+				}
+				return new Component(obj, parentPath, componentIndex);
+			}
+		).filter(Boolean);
 	}
 
 	meta: T;
@@ -24,7 +45,7 @@ export class Component<T: JSONComponentType> {
 	excludedId: ?Array<string | boolean>;
 	excludedName: ?Array<string>;
 
-	constructor(cmp: T, parentPath: string) {
+	constructor(cmp: T, parentPath: string, componentIndex) {
 		this.constructor.warning(cmp,parentPath);
 		this.meta = cmp;
 		this.id = cmp.id;
@@ -37,9 +58,7 @@ export class Component<T: JSONComponentType> {
 		this.paramsList = this.fullPath.match(/:(\w+)/g);
 		this.annotatedName = `${cmp.section}@${cmp.id}`;
 		if (cmp.componentsList) {
-			this.componentsList = cmp.componentsList.map(
-				(obj) => new Component(obj,this.fullPath)
-			);
+			this.componentsList = Component.generateComponentList(cmp.componentsList, this.path, componentIndex);
 			this.layout = this.componentsList
 				.reduce((result,cmp) => {
 					const {section, annotatedName} = cmp;
@@ -69,4 +88,22 @@ function joinPath(left,right) {
 
 function excludeByArray(array, valueToIgnore) {
 	return array ? array.some((val) => val === valueToIgnore) : false;
+}
+
+function getCloneMergedComponent(componentIndex, cloneID) {
+	const cloneSourceComponent = componentIndex.find((comp) => comp.id === cloneID);
+	if (cloneSourceComponent) {
+		console.log(cloneSourceComponent);
+		if (cloneSourceComponent.cloneID) {
+			return mergeOptions(
+				getCloneMergedComponent(componentIndex,cloneSourceComponent.cloneID),
+				cloneSourceComponent
+			);
+		}
+		return cloneSourceComponent;
+	}
+
+	console.warn("Cannot find cloneSource component for cloneID : ", cloneID);
+
+	return undefined;
 }

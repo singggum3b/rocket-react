@@ -105,10 +105,18 @@
 		},
 		"componentsList": [
 			{
-				"cloneID": "topmenu"
+				"id": "service-topmenu",
+				"cloneID": "topmenu",
+				"props": {
+					"color": "yellow"
+				}
 			},
 			{
-				"cloneID": "sidemenu"
+				"id": "service-topmenu2",
+				"cloneID": "service-topmenu",
+				"props": {
+					"color": "brown"
+				}
 			},
 			{
 				"id": "service-product-detail",

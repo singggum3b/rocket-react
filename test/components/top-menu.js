@@ -13,9 +13,6 @@ class TopMenu extends Top {
 
 }
 
-TopMenu.propTypes = {
-	abc: React.PropTypes.string.isRequired,
-};
 TopMenu.displayName = "TopMenu";
 
 export default TopMenu;

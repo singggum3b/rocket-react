@@ -1,5 +1,10 @@
 // @flow
-import type {JSONRouteType,JSONComponentType,JSONReplacementComponentType} from "../type/json.type";
+import type {
+	JSONRouteType,
+	JSONComponentType,
+	JSONReplacementComponentType,
+	JSONComponentListType,
+} from "../type/json.type";
 import type {ComponentResolverType,RouteDataResolverType} from "../type/factoryOption.type";
 import {Component} from "./component.class";
 
@@ -24,7 +29,7 @@ export class Route<T: JSONRouteType> {
 		if (routeObj.parentPath) {
 			return templatePromise.then((cmp) => {
 				return {[routeObj.annotatedName]: cmp};
-			})
+			});
 		}
 		return templatePromise;
 	}
@@ -125,13 +130,11 @@ export class Route<T: JSONRouteType> {
 		[section: string]: Array<string>
 	};
 
-	constructor(tpl: T) {
+	constructor(tpl: T, componentIndex) {
 		this.meta = tpl;
 		this.name = tpl.name;
 		this.path = tpl.path || "/";
-		this.componentsList = tpl.componentsList.map(
-			(obj) => new Component(obj,this.path)
-		);
+		this.componentsList = Component.generateComponentList(tpl.componentsList, this.path, componentIndex);
 		this.layout = this.componentsList
 			.reduce((result,cmp) => {
 				const {section, annotatedName} = cmp;

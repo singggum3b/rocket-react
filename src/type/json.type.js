@@ -3,6 +3,24 @@ import type { $Refinement, $Reify } from "tcomb";
 import t from "tcomb";
 
 // recursive
+export type JSONComponentListType = JSONComponentType | JSONCloneComponentType
+
+JSONComponentListType.dispatch = function (value) {
+	if (value.cloneID) return JSONCloneComponentType;
+	return JSONComponentType;
+};
+
+export type JSONCloneComponentType = {
+	id: string | number,
+	cloneID: string | number,
+	props?: {
+		[name: string]: any
+	},
+	excludedId?: Array<string | boolean>,
+	excludedName?: Array<string>,
+}
+
+// recursive
 export type JSONComponentType = {
 	id: string | number,
 	name: string,
@@ -15,16 +33,7 @@ export type JSONComponentType = {
 	props: {
 		[name: string]: any
 	},
-	componentsList?: Array<JSONComponentType>,
-}
-
-export type JSONCloneComponentType = {
-	cloneID: string | number,
-	props?: {
-		[name: string]: any
-	},
-	excludedId?: Array<string | boolean>,
-	excludedName?: Array<string>,
+	componentsList?: Array<JSONComponentListType>,
 }
 
 export type JSONReplacementComponentType = {
@@ -40,7 +49,7 @@ export type JSONRouteType = {
 	props: {
 		[name: string]: any
 	},
-	componentsList: Array<JSONComponentType>,
+	componentsList: Array<JSONComponentListType>,
 }
 
 export type JSONSiteMapType = Array<JSONRouteType>
