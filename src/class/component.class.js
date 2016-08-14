@@ -1,5 +1,5 @@
 // @flow
-import type { JSONComponentType, JSONComponentListType } from "../type/json.type";
+import type { JSONComponentType, JSONComponentListType, JSONCloneComponentType } from "../type/json.type";
 import { default as mergeOptions } from "merge-options";
 
 export class Component<T: JSONComponentType> {
@@ -14,19 +14,21 @@ export class Component<T: JSONComponentType> {
 	static generateComponentList(
 		componentsList: Array<JSONComponentListType>,
 		parentPath: string,
-		componentIndex
-	) {
+		componentIndex: Array<JSONComponentListType>,
+	): Array<Component<*>> {
 		return componentsList.map(
-			(obj) => {
-				if (obj.cloneID) {
-					let cloneSourceComponent = getCloneMergedComponent(componentIndex, obj.cloneID);
+			(componentObject: JSONComponentListType): ?Component<*> => {
+				if (componentObject.type === "clone") {
+					const cloneSourceComponent = getCloneMergedComponent(componentIndex, componentObject.cloneID);
 					if (cloneSourceComponent) {
-						cloneSourceComponent = mergeOptions(cloneSourceComponent,obj);
-						return new Component(cloneSourceComponent, parentPath, componentIndex);
+						const resultComponent = mergeOptions(cloneSourceComponent,componentObject);
+
+						return new Component(resultComponent, parentPath, componentIndex);
 					}
-					return false;
+					return null;
+				} else {
+					return new Component(componentObject, parentPath, componentIndex);
 				}
-				return new Component(obj, parentPath, componentIndex);
 			}
 		).filter(Boolean);
 	}
@@ -35,17 +37,21 @@ export class Component<T: JSONComponentType> {
 	id: string | number;
 	name: string;
 	section: string;
-	exactPath: boolean;
+	exactPath: ?boolean;
 	type: "component" = "component";
-	path: string | void;
+	path: string;
+	fullPath: string;
 	parentPath: string;
 	annotatedName: string;
-	paramsList: Array<string>;
-	componentsList: ?Array<this>;
+	paramsList: ?Array<string>;
+	componentsList: ?Array<Component<T>>;
 	excludedId: ?Array<string | boolean>;
 	excludedName: ?Array<string>;
+	layout: {
+		[section: string]: Array<string>
+	};
 
-	constructor(cmp: T, parentPath: string, componentIndex) {
+	constructor(cmp: T, parentPath: string, componentIndex: Array<JSONComponentListType>) {
 		this.constructor.warning(cmp,parentPath);
 		this.meta = cmp;
 		this.id = cmp.id;
@@ -53,19 +59,21 @@ export class Component<T: JSONComponentType> {
 		this.section = cmp.section;
 		this.name = cmp.name;
 		this.parentPath = parentPath || "/";
-		this.path = cmp.path || undefined;
+		this.path = cmp.path || "";
 		this.fullPath = joinPath(this.parentPath, this.path);
 		this.paramsList = this.fullPath.match(/:(\w+)/g);
 		this.annotatedName = `${cmp.section}@${cmp.id}`;
 		if (cmp.componentsList) {
-			this.componentsList = Component.generateComponentList(cmp.componentsList, this.path, componentIndex);
-			this.layout = this.componentsList
-				.reduce((result,cmp) => {
-					const {section, annotatedName} = cmp;
-					return Object.assign(result,{
-						[section]: result[section] ? result[section].concat(annotatedName) : [annotatedName],
-					});
-				},{});
+			this.componentsList = Component.generateComponentList(
+				cmp.componentsList, this.path,
+				componentIndex
+			);
+			this.layout = this.componentsList.reduce((result: Object, comp: Component<T>) => {
+				const {section, annotatedName} = comp;
+				return Object.assign(result,{
+					[section]: result[section] ? result[section].concat(annotatedName) : [annotatedName],
+				});
+			},{});
 		}
 		this.excludedId = cmp.excludedId;
 		this.excludedName = cmp.excludedName;
@@ -73,7 +81,8 @@ export class Component<T: JSONComponentType> {
 
 	isExcluded(cmp: Component<*>) {
 		return [["excludedId","id"],["excludedName","name"],["excludedPath","path"]]
-			.some((property) => excludeByArray(cmp[property[0]],this[property[1]]));
+			// $FlowFixMe Flow doesn't support this usecase
+			.some((property) => excludeByArray(cmp[property[0]], thisInstance[property[1]]));
 	}
 
 }
@@ -90,13 +99,12 @@ function excludeByArray(array, valueToIgnore) {
 	return array ? array.some((val) => val === valueToIgnore) : false;
 }
 
-function getCloneMergedComponent(componentIndex, cloneID) {
+function getCloneMergedComponent(componentIndex: Array<JSONComponentListType>, cloneID: string | number): ?JSONComponentListType {
 	const cloneSourceComponent = componentIndex.find((comp) => comp.id === cloneID);
 	if (cloneSourceComponent) {
-		console.log(cloneSourceComponent);
 		if (cloneSourceComponent.cloneID) {
 			return mergeOptions(
-				getCloneMergedComponent(componentIndex,cloneSourceComponent.cloneID),
+				getCloneMergedComponent(componentIndex, cloneSourceComponent.cloneID),
 				cloneSourceComponent
 			);
 		}

@@ -35,9 +35,16 @@ export class Route<T: JSONRouteType> {
 	}
 
 	static getIndexComponentList(
-		nextState: {location: Object}, routeObj: Route<T> | Component<JSONComponentType>,resolver : ComponentResolverType
+		nextState: {location: Object},
+		routeObj: Route<T> | Component<JSONComponentType>,
+		resolver : ComponentResolverType
 	) {
-		const indexComponentList = routeObj.componentsList.filter((cmp) => !cmp.meta.path);
+		const {componentsList} = routeObj;
+
+		// I make sure componentList is not null
+		if (componentsList == null) return [];
+
+		const indexComponentList = componentsList.filter((cmp) => !cmp.meta.path);
 		return this.__resolveComponentList(indexComponentList,routeObj,resolver);
 	}
 
@@ -48,16 +55,22 @@ export class Route<T: JSONRouteType> {
 		component: Component<JSONComponentType>,
 		excludedComponent?: JSONReplacementComponentType,
 	) {
-		let componentList = routeObj.componentsList.filter(
+
+		const {componentsList} = routeObj;
+
+		// I make sure componentList is not null
+		if (componentsList == null) return [];
+
+		let processedComponentList = componentsList.filter(
 			(cmp) => {
-				//=================
+				// =================
 				let isSame = false;
 				// ==================
 				// I check if component path is out of root - decouple path and UI
 				if (component.path && component.path.indexOf("/") === 0) {
 					isSame = isPathSameRoot(`${component.parentPath}${component.path}`,cmp.fullPath);
-					//console.log(`${component.parentPath}${component.path}`,cmp.fullPath);
-					//console.log(isSame);
+					// console.log(`${component.parentPath}${component.path}`,cmp.fullPath);
+					// console.log(isSame);
 					if (cmp.exactPath) {
 						const isSameInJSON = isPathSameRoot(nextState.location.pathname,cmp.fullPath);
 						return (
@@ -70,7 +83,7 @@ export class Route<T: JSONRouteType> {
 				// ======================
 				isSame = isPathSameRoot(nextState.location.pathname,cmp.fullPath);
 				if (cmp.exactPath) {
-					//console.log(nextState.location.pathname,cmp.fullPath);
+					// console.log(nextState.location.pathname,cmp.fullPath);
 					return (isSame.sameRoot && isSame.sameLength);
 				}
 
@@ -79,28 +92,35 @@ export class Route<T: JSONRouteType> {
 		);
 		// ======================
 		if (excludedComponent) {
+			const {props} = excludedComponent;
 			// I replace excluded component with provided one
-			componentList = componentList.map((cmp) => {
+			processedComponentList = processedComponentList.map((cmp) => {
 				const isExcluded = cmp.isExcluded(component);
+
 				if (isExcluded) {
 					const excludedProps = Object.assign({
 						exludedBy: component,
-					},excludedComponent.props);
-					return new Component(Object.assign({},
-						cmp.meta,
-						excludedComponent,
-						{props: excludedProps}
-					),cmp.parentPath);
+					},props);
+
+					return new Component(
+						Object.assign({},
+							cmp.meta,
+							excludedComponent,
+							{props}
+						),
+						cmp.parentPath,
+						[]
+					);
 				}
 				return cmp;
 			});
 		} else {
 			// I filter excluded components
-			componentList = componentList.filter((cmp) => {
+			processedComponentList = processedComponentList.filter((cmp) => {
 				return !cmp.isExcluded(component);
 			});
 		}
-		return this.__resolveComponentList(componentList,routeObj,resolver);
+		return this.__resolveComponentList(processedComponentList,routeObj,resolver);
 	}
 
 	static __resolveComponentList(componentList,routeObj,resolver) {
@@ -126,15 +146,20 @@ export class Route<T: JSONRouteType> {
 	name: string;
 	path: string;
 	componentsList: Array<Component<*>>;
+	annotatedName: string;
 	layout: {
 		[section: string]: Array<string>
 	};
 
-	constructor(tpl: T, componentIndex) {
+	constructor(tpl: T, componentIndex: Array<JSONComponentListType>) {
 		this.meta = tpl;
 		this.name = tpl.name;
 		this.path = tpl.path || "/";
-		this.componentsList = Component.generateComponentList(tpl.componentsList, this.path, componentIndex);
+		this.componentsList = Component.generateComponentList(
+			tpl.componentsList,
+			this.path, componentIndex
+		);
+		this.annotatedName = `route@${this.path}@${this.name}`;
 		this.layout = this.componentsList
 			.reduce((result,cmp) => {
 				const {section, annotatedName} = cmp;

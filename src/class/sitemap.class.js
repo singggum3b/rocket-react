@@ -1,5 +1,5 @@
 // @flow
-import type {JSONSiteMapType} from "../type/json.type";
+import type {JSONSiteMapType, JSONComponentListType} from "../type/json.type";
 import {Route} from "./route.class";
 
 export class SiteMap<T : JSONSiteMapType> {

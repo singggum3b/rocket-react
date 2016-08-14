@@ -109,14 +109,16 @@
 				"cloneID": "topmenu",
 				"props": {
 					"color": "yellow"
-				}
+				},
+				"type": "clone"
 			},
 			{
 				"id": "service-topmenu2",
 				"cloneID": "service-topmenu",
 				"props": {
 					"color": "brown"
-				}
+				},
+				"type": "clone"
 			},
 			{
 				"id": "service-product-detail",
