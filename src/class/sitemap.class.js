@@ -10,12 +10,10 @@ export class SiteMap<T : JSONSiteMapType> {
 
 	constructor(sitemap: T) {
 		this.meta = sitemap;
-		console.log(sitemap);
 		this.flatComponentList = [].concat.apply(
 			[],
 			sitemap.map((route) => flattenProperty(route,"componentsList"))
-		);
-		console.log(this.flatComponentList);
+		).filter((comp)=>(comp.id || comp.id === 0));
 		this.routeList = sitemap.map((route) => {
 
 			return new Route(route, this.flatComponentList);

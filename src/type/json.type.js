@@ -2,7 +2,44 @@
 import type { $Refinement, $Reify } from "tcomb";
 import t from "tcomb";
 
+export type ID = string | number;
+
+// $FlowFixMe
+ID.dispatch = function (value) {
+	if (typeof value === "string" || value instanceof String) return t.String;
+	return t.Number;
+};
+
+export type JSONCloneComponentType = {
+	id: ID,
+	cloneID: ID,
+	path?: string,
+	props?: {
+		[name: string]: any
+	},
+	type: "clone",
+	section?: string,
+	exactPath?: boolean,
+	excludedId?: Array<ID>,
+	excludedName?: Array<string>,
+}
+
 // recursive
+export type JSONComponentType = {
+	id: ID,
+	name: string,
+	path?: string,
+	section: string,
+	exactPath?: boolean,
+	excludedId?: Array<ID>,
+	excludedName?: Array<string>,
+	type: "component",
+	props: {
+		[name: string]: any
+	},
+	componentsList?: Array<JSONComponentListType>,
+}
+
 export type JSONComponentListType = JSONComponentType | JSONCloneComponentType
 
 // $FlowFixMe Not necessary to flow check this function, only relevant to tcomb
@@ -12,36 +49,6 @@ JSONComponentListType.dispatch = function (value) {
 	// $FlowFixMe
 	return JSONComponentType;
 };
-
-export type JSONCloneComponentType = {
-	id: string | number,
-	cloneID: string | number,
-	path?: string,
-	props?: {
-		[name: string]: any
-	},
-	type: "clone",
-	section?: string,
-	exactPath?: boolean,
-	excludedId?: Array<string | boolean>,
-	excludedName?: Array<string>,
-}
-
-// recursive
-export type JSONComponentType = {
-	id: string | number,
-	name: string,
-	path?: string,
-	section: string,
-	exactPath?: boolean,
-	excludedId?: Array<string | boolean>,
-	excludedName?: Array<string>,
-	type: "component",
-	props: {
-		[name: string]: any
-	},
-	componentsList?: Array<JSONComponentListType>,
-}
 
 export type JSONReplacementComponentType = {
 	name: string,

@@ -1,5 +1,5 @@
 // @flow
-import type { JSONComponentType, JSONComponentListType, JSONCloneComponentType } from "../type/json.type";
+import type { JSONComponentType, JSONComponentListType, ID } from "../type/json.type";
 import { default as mergeOptions } from "merge-options";
 
 export class Component<T: JSONComponentType> {
@@ -45,7 +45,7 @@ export class Component<T: JSONComponentType> {
 	annotatedName: string;
 	paramsList: ?Array<string>;
 	componentsList: ?Array<Component<T>>;
-	excludedId: ?Array<string | boolean>;
+	excludedId: ?Array<ID>;
 	excludedName: ?Array<string>;
 	layout: {
 		[section: string]: Array<string>

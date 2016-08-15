@@ -12,7 +12,6 @@ import {createSyncFactory, cloneReactClassWithProps} from "../src";
 
 import {Route, Router, IndexRoute, browserHistory} from "react-router";
 
-const sampleRoute = require("./sampleRoute.json");
 const sampleSitemap = require("./sampleSiteMap.json");
 const parsedSiteMap = fromJSON(sampleSitemap,JSONSiteMapType);
 
@@ -43,7 +42,6 @@ const syncRouteFactory = createSyncFactory({
 			resolve(sampleRoute);
 		});
 	},
-
 });
 
 // =====================================
