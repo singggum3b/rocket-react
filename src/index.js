@@ -13,6 +13,13 @@ import {SiteMap} from "./class/sitemap.class";
 import {Route} from "./class/route.class";
 import {Component} from "./class/component.class";
 
+
+export {
+	// $FlowFixMe
+	JSONSiteMapType, JSONComponentType,
+	Component, Route,
+};
+
 export function createSyncFactory(option: {
 	siteMap: JSONSiteMapType,
 	componentResolver: ComponentResolverType,

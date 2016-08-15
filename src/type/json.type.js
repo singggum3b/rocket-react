@@ -1,5 +1,4 @@
 // @flow
-import type { $Refinement, $Reify } from "tcomb";
 import t from "tcomb";
 
 export type ID = string | number;

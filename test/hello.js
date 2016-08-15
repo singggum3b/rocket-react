@@ -8,12 +8,13 @@ import fromJSON from "tcomb/lib/fromJSON";
 import {Route as RouteClass} from "../src/class/route.class";
 import {Component} from "../src/class/component.class";
 import type {JSONSiteMapType, JSONRouteType} from "../src/type/json.type";
-import {createSyncFactory, cloneReactClassWithProps} from "../src";
+import {createSyncFactory, cloneReactClassWithProps} from "../src/index";
 
 import {Route, Router, IndexRoute, browserHistory} from "react-router";
 
 const sampleSitemap = require("./sampleSiteMap.json");
 const parsedSiteMap = fromJSON(sampleSitemap,JSONSiteMapType);
+
 
 // ============================
 function moduleResolver(name) {
