@@ -41,6 +41,8 @@ export function createSyncFactory(option: {
 						Route.getIndexComponentList(nextState,parentRouteObj,option.componentResolver).catch(e => console.error(e)),
 					]).then((resultList) => {
 						cb(null,Object.assign({},resultList[0],resultList[1]));
+					}).catch((err)=> {
+						console.error(err, err.stack);
 					})
 				} else {
 					Route
@@ -49,6 +51,7 @@ export function createSyncFactory(option: {
 							cb(null,res);
 						})
 						.catch((err) => {
+							console.error(err, err.stack);
 							cb(err,null);
 						});
 				}
@@ -62,6 +65,7 @@ export function createSyncFactory(option: {
 						cb(null,res);
 					})
 					.catch((err) => {
+						console.error(err, err.stack);
 						cb(err,null);
 					});
 			};
@@ -80,6 +84,7 @@ export function createSyncFactory(option: {
 						cb(null,res);
 					})
 					.catch((err) => {
+						console.error(err, err.stack);
 						cb(err,null);
 					});
 			};
