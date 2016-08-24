@@ -850,11 +850,14 @@ return /******/ (function(modules) { // webpackBootstrap
 								return console.error(e);
 							})]).then(function (resultList) {
 								cb(null, Object.assign({}, resultList[0], resultList[1]));
+							}).catch(function (err) {
+								console.error(err, err.stack);
 							});
 						} else {
 							_route.Route.getTemplateClass(nextState, routeObj, option.componentResolver, parentRouteObj).then(function (res) {
 								cb(null, res);
 							}).catch(function (err) {
+								console.error(err, err.stack);
 								cb(err, null);
 							});
 						}
@@ -867,6 +870,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						_route.Route.getIndexComponentList(nextState, routeObj, option.componentResolver).then(function (res) {
 							cb(null, res);
 						}).catch(function (err) {
+							console.error(err, err.stack);
 							cb(err, null);
 						});
 					};
@@ -880,6 +884,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						_route.Route.getSubRouteComponentList(nextState, routeObj, option.componentResolver, component, option.excludedComponent).then(function (res) {
 							cb(null, res);
 						}).catch(function (err) {
+							console.error(err, err.stack);
 							cb(err, null);
 						});
 					};
