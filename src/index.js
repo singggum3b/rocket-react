@@ -40,19 +40,21 @@ export function createSyncFactory(option: {
 						Route.getTemplateClass(nextState,routeObj,option.componentResolver).catch(e => console.error(e)),
 						Route.getIndexComponentList(nextState,parentRouteObj,option.componentResolver).catch(e => console.error(e)),
 					]).then((resultList) => {
-						cb(null,Object.assign({},resultList[0],resultList[1]));
-					}).catch((err)=> {
-						console.error(err, err.stack);
-					})
+						try {
+							cb(null,Object.assign({},resultList[0],resultList[1]));
+						} catch (e) {
+							throw (e);
+						}
+					});
 				} else {
 					Route
 						.getTemplateClass(nextState,routeObj,option.componentResolver,parentRouteObj)
 						.then((res) => {
-							cb(null,res);
-						})
-						.catch((err) => {
-							console.error(err, err.stack);
-							cb(err,null);
+							try {
+								cb(null,res);
+							} catch (e) {
+								throw (e);
+							}
 						});
 				}
 			};
@@ -62,11 +64,11 @@ export function createSyncFactory(option: {
 				Route
 					.getIndexComponentList(nextState,routeObj,option.componentResolver)
 					.then((res) => {
-						cb(null,res);
-					})
-					.catch((err) => {
-						console.error(err, err.stack);
-						cb(err,null);
+						try {
+							cb(null,res);
+						} catch (e) {
+							throw (e);
+						}
 					});
 			};
 		},
@@ -81,11 +83,11 @@ export function createSyncFactory(option: {
 						option.excludedComponent,
 					)
 					.then((res) => {
-						cb(null,res);
-					})
-					.catch((err) => {
-						console.error(err, err.stack);
-						cb(err,null);
+						try {
+							cb(null,res);
+						} catch (e) {
+							throw (e);
+						}
 					});
 			};
 		},

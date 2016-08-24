@@ -849,13 +849,19 @@ return /******/ (function(modules) { // webpackBootstrap
 							}), _route.Route.getIndexComponentList(nextState, parentRouteObj, option.componentResolver).catch(function (e) {
 								return console.error(e);
 							})]).then(function (resultList) {
-								cb(null, Object.assign({}, resultList[0], resultList[1]));
+								try {
+									cb(null, Object.assign({}, resultList[0], resultList[1]));
+								} catch (e) {
+									throw e;
+								}
 							});
 						} else {
 							_route.Route.getTemplateClass(nextState, routeObj, option.componentResolver, parentRouteObj).then(function (res) {
-								cb(null, res);
-							}).catch(function (err) {
-								cb(err, null);
+								try {
+									cb(null, res);
+								} catch (e) {
+									throw e;
+								}
 							});
 						}
 					};
@@ -865,9 +871,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					return function (nextState, cb) {
 						_route.Route.getIndexComponentList(nextState, routeObj, option.componentResolver).then(function (res) {
-							cb(null, res);
-						}).catch(function (err) {
-							cb(err, null);
+							try {
+								cb(null, res);
+							} catch (e) {
+								throw e;
+							}
 						});
 					};
 				},
@@ -878,9 +886,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					return function (nextState, cb) {
 						_route.Route.getSubRouteComponentList(nextState, routeObj, option.componentResolver, component, option.excludedComponent).then(function (res) {
-							cb(null, res);
-						}).catch(function (err) {
-							cb(err, null);
+							try {
+								cb(null, res);
+							} catch (e) {
+								throw e;
+							}
 						});
 					};
 				}

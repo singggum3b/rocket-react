@@ -1,7 +1,6 @@
 class Top extends React.Component {
 
 	render() {
-		console.log(this.props);
 		return (
 			<div>Top</div>
 		);
