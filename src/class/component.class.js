@@ -82,7 +82,7 @@ export class Component<T: JSONComponentType> {
 	isExcluded(cmp: Component<*>) {
 		return [["excludedId","id"],["excludedName","name"],["excludedPath","path"]]
 			// $FlowFixMe Flow doesn't support this usecase
-			.some((property) => excludeByArray(cmp[property[0]], thisInstance[property[1]]));
+			.some((property) => excludeByArray(cmp[property[0]], this[property[1]]));
 	}
 
 }

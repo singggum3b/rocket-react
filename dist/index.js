@@ -304,12 +304,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Component, [{
 			key: "isExcluded",
 			value: function isExcluded(cmp) {
+				var _this = this;
+
 				_assert(cmp, Component, "cmp");
 
 				return [["excludedId", "id"], ["excludedName", "name"], ["excludedPath", "path"]]
 				// $FlowFixMe Flow doesn't support this usecase
 				.some(function (property) {
-					return excludeByArray(cmp[property[0]], thisInstance[property[1]]);
+					return excludeByArray(cmp[property[0]], _this[property[1]]);
 				});
 			}
 		}]);
