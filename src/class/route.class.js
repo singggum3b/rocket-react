@@ -115,6 +115,7 @@ export class Route<T: JSONRouteType> {
 				return cmp;
 			});
 		} else {
+			console.log(component);
 			// I filter excluded components
 			processedComponentList = processedComponentList.filter((cmp) => {
 				return !cmp.isExcluded(component);
@@ -154,20 +155,25 @@ export class Route<T: JSONRouteType> {
 		this.meta = tpl;
 		this.name = tpl.name;
 		this.path = tpl.path || "/";
-		this.componentsList = Component.generateComponentList(
+		const componentList = Component.generateComponentList(
 			tpl.componentsList,
 			this.path, componentIndex
 		);
-		this.annotatedName = `route@${this.path}@${this.name}`;
-		this.layout = this.componentsList
+		this.layout = componentList
 			.reduce((result,cmp) => {
 				const {section, annotatedName} = cmp;
 				return Object.assign(result,{
 					[section]: result[section] ? result[section].concat(annotatedName) : [annotatedName],
 				});
 			},{});
+		this.componentsList = sortComponentByPriority(componentList);
+		this.annotatedName = `route@${this.path}@${this.name}`;
 	}
 
+}
+
+function sortComponentByPriority(componentsList: Array<Component<*>>) {
+	return componentsList.sort((a, b) => b.priority - a.priority);
 }
 
 function isPathSameRoot(source,target) {

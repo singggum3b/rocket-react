@@ -39,6 +39,7 @@ export class Component<T: JSONComponentType> {
 
 	meta: T;
 	id: string | number;
+	priority: number;
 	name: string;
 	section: string;
 	exactPath: ?boolean;
@@ -59,6 +60,7 @@ export class Component<T: JSONComponentType> {
 		this.constructor.warning(cmp,parentPath);
 		this.meta = cmp;
 		this.id = cmp.id;
+		this.priority = cmp.priority || 0;
 		this.exactPath = cmp.exactPath;
 		this.section = cmp.section;
 		this.name = cmp.name;

@@ -83,6 +83,19 @@
 				}
 			},
 			{
+				"id": "fww",
+				"priority": 1,
+				"path": "product-review",
+				"type": "component",
+				"excludedId": ["3"],
+				"excludedName": ["side-menu", "product-detail"],
+				"name": "product-review",
+				"section": "header",
+				"props": {
+					"color": "red"
+				}
+			},
+			{
 				"id": "9",
 				"path": "/product-review",
 				"type": "component",

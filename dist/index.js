@@ -93,6 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var JSONCloneComponentType = exports.JSONCloneComponentType = _tcomb2.default.interface({
 		id: ID,
 		cloneID: ID,
+		priority: _tcomb2.default.maybe(_tcomb2.default.Number),
 		path: _tcomb2.default.maybe(_tcomb2.default.String),
 		props: _tcomb2.default.maybe(_tcomb2.default.dict(_tcomb2.default.String, _tcomb2.default.Any)),
 		type: _tcomb2.default.enums.of(["clone"]),
@@ -135,6 +136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	JSONComponentType.define(_tcomb2.default.interface({
 		id: ID,
+		priority: _tcomb2.default.maybe(_tcomb2.default.Number),
 		name: _tcomb2.default.String,
 		path: _tcomb2.default.maybe(_tcomb2.default.String),
 		section: _tcomb2.default.String,
@@ -280,6 +282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.constructor.warning(cmp, parentPath);
 			this.meta = cmp;
 			this.id = cmp.id;
+			this.priority = cmp.priority || 0;
 			this.exactPath = cmp.exactPath;
 			this.section = cmp.section;
 			this.name = cmp.name;
@@ -522,6 +525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 					})();
 				} else {
+					console.log(component);
 					// I filter excluded components
 					processedComponentList = processedComponentList.filter(function (cmp) {
 						return !cmp.isExcluded(component);
@@ -562,14 +566,15 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.meta = tpl;
 			this.name = tpl.name;
 			this.path = tpl.path || "/";
-			this.componentsList = _component.Component.generateComponentList(tpl.componentsList, this.path, componentIndex);
-			this.annotatedName = "route@" + this.path + "@" + this.name;
-			this.layout = this.componentsList.reduce(function (result, cmp) {
+			var componentList = _component.Component.generateComponentList(tpl.componentsList, this.path, componentIndex);
+			this.layout = componentList.reduce(function (result, cmp) {
 				var section = cmp.section;
 				var annotatedName = cmp.annotatedName;
 
 				return Object.assign(result, _defineProperty({}, section, result[section] ? result[section].concat(annotatedName) : [annotatedName]));
 			}, {});
+			this.componentsList = sortComponentByPriority(componentList);
+			this.annotatedName = "route@" + this.path + "@" + this.name;
 		}
 
 		return Route;
@@ -580,6 +585,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		COMPONENT: "component"
 	};
 
+
+	function sortComponentByPriority(componentsList) {
+		_assert(componentsList, _tcomb2.default.list(_component.Component), "componentsList");
+
+		return componentsList.sort(function (a, b) {
+			return b.priority - a.priority;
+		});
+	}
 
 	function isPathSameRoot(source, target) {
 		var sourceArray = source.split("/");

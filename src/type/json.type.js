@@ -12,6 +12,7 @@ ID.dispatch = function (value) {
 export type JSONCloneComponentType = {
 	id: ID,
 	cloneID: ID,
+	priority?: number,
 	path?: string,
 	props?: {
 		[name: string]: any
@@ -26,6 +27,7 @@ export type JSONCloneComponentType = {
 // recursive
 export type JSONComponentType = {
 	id: ID,
+	priority?: number,
 	name: string,
 	path?: string,
 	section: string,
