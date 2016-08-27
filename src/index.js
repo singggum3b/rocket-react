@@ -83,6 +83,7 @@ export function createSyncFactory(option: {
 						option.excludedComponent,
 					)
 					.then((res) => {
+						console.log(res);
 						try {
 							cb(null,res);
 						} catch (e) {

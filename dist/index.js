@@ -222,6 +222,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					console.warn(cmp);
 					throw new Error("Inefficient usage of component : Same path for child and parent.");
 				}
+
+				if (parentPath === "/" && cmp.path) {
+					console.warn("Root route [/] should not have nested component with path property.");
+				}
 			}
 		}, {
 			key: "generateComponentList",
@@ -324,7 +328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		if (right.indexOf("/") === 0) {
 			return "" + right;
 		}
-		return left + "/" + right;
+		return (left + "/" + right).replace(/(\/{2,})/g, "/");
 	}
 
 	function excludeByArray(array, valueToIgnore) {
@@ -888,6 +892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					return function (nextState, cb) {
 						_route.Route.getSubRouteComponentList(nextState, routeObj, option.componentResolver, component, option.excludedComponent).then(function (res) {
+							console.log(res);
 							try {
 								cb(null, res);
 							} catch (e) {

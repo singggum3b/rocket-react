@@ -9,6 +9,10 @@ export class Component<T: JSONComponentType> {
 			console.warn(cmp);
 			throw new Error("Inefficient usage of component : Same path for child and parent.");
 		}
+
+		if (parentPath === "/" && cmp.path) {
+			console.warn("Root route [/] should not have nested component with path property.");
+		}
 	}
 
 	static generateComponentList(
@@ -92,7 +96,7 @@ function joinPath(left,right) {
 	if (right.indexOf("/") === 0) {
 		return `${right}`;
 	}
-	return `${left}/${right}`;
+	return `${left}/${right}`.replace(/(\/{2,})/g,"/");
 }
 
 function excludeByArray(array, valueToIgnore) {

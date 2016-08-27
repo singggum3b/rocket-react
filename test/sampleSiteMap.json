@@ -1,6 +1,35 @@
 [
 	{
 		"name": "template-default",
+		"path" : "/",
+		"props": {
+			"color": "blue"
+		},
+		"componentsList": [
+			{
+				"id": "topmenu",
+				"path": "taca",
+				"type": "component",
+				"name": "top-menu",
+				"section": "header",
+				"props": {
+					"color": "red"
+				}
+			},
+			{
+				"id": "sidemenu",
+				"path": "taca/:tiki",
+				"type": "component",
+				"name": "side-menu",
+				"section": "body",
+				"props": {
+					"color": "red"
+				}
+			}
+		]
+	},
+	{
+		"name": "template-default",
 		"path" : "/product",
 		"props": {
 			"color": "blue"
