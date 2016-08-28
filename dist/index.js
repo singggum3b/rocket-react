@@ -525,7 +525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 					})();
 				} else {
-					console.log(component);
+					// console.log(component);
 					// I filter excluded components
 					processedComponentList = processedComponentList.filter(function (cmp) {
 						return !cmp.isExcluded(component);
@@ -905,7 +905,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					return function (nextState, cb) {
 						_route.Route.getSubRouteComponentList(nextState, routeObj, option.componentResolver, component, option.excludedComponent).then(function (res) {
-							console.log(res);
 							try {
 								cb(null, res);
 							} catch (e) {

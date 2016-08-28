@@ -115,7 +115,7 @@ export class Route<T: JSONRouteType> {
 				return cmp;
 			});
 		} else {
-			console.log(component);
+			// console.log(component);
 			// I filter excluded components
 			processedComponentList = processedComponentList.filter((cmp) => {
 				return !cmp.isExcluded(component);
