@@ -25,8 +25,7 @@ export class Component<T: JSONComponentType> {
 				if (componentObject.type === "clone") {
 					const cloneSourceComponent = getCloneMergedComponent(componentIndex, componentObject.cloneID);
 					if (cloneSourceComponent) {
-						const resultComponent = mergeOptions(cloneSourceComponent,componentObject);
-
+						const resultComponent = mergeOptions(cloneSourceComponent, removeNilProperty(componentObject));
 						return new Component(resultComponent, parentPath, componentIndex);
 					}
 					return null;
@@ -111,7 +110,7 @@ function getCloneMergedComponent(componentIndex: Array<JSONComponentListType>, c
 		if (cloneSourceComponent.cloneID) {
 			return mergeOptions(
 				getCloneMergedComponent(componentIndex, cloneSourceComponent.cloneID),
-				cloneSourceComponent
+				removeNilProperty(cloneSourceComponent)
 			);
 		}
 		return cloneSourceComponent;
@@ -120,4 +119,14 @@ function getCloneMergedComponent(componentIndex: Array<JSONComponentListType>, c
 	console.warn("Cannot find cloneSource component for cloneID : ", cloneID);
 
 	return undefined;
+}
+
+function removeNilProperty(obj: Object) : Object {
+	Reflect.ownKeys(obj).map((propName) => {
+		if ((obj[propName] === undefined) || (obj[propName] === null)) {
+			delete obj[propName];
+		}
+		return propName;
+	});
+	return obj;
 }

@@ -246,8 +246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 							if (componentObject.type === "clone") {
 								var cloneSourceComponent = getCloneMergedComponent(componentIndex, componentObject.cloneID);
 								if (cloneSourceComponent) {
-									var resultComponent = (0, _mergeOptions2.default)(cloneSourceComponent, componentObject);
-
+									var resultComponent = (0, _mergeOptions2.default)(cloneSourceComponent, removeNilProperty(componentObject));
 									return new Component(resultComponent, parentPath, componentIndex);
 								}
 								return null;
@@ -351,7 +350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			});
 			if (cloneSourceComponent) {
 				if (cloneSourceComponent.cloneID) {
-					return (0, _mergeOptions2.default)(getCloneMergedComponent(componentIndex, cloneSourceComponent.cloneID), cloneSourceComponent);
+					return (0, _mergeOptions2.default)(getCloneMergedComponent(componentIndex, cloneSourceComponent.cloneID), removeNilProperty(cloneSourceComponent));
 				}
 				return cloneSourceComponent;
 			}
@@ -362,6 +361,24 @@ return /******/ (function(modules) { // webpackBootstrap
 		}.call(this, componentIndex, cloneID);
 
 		_assert(ret, _tcomb2.default.maybe(_json.JSONComponentListType), "return value");
+
+		return ret;
+	}
+
+	function removeNilProperty(obj) {
+		_assert(obj, _tcomb2.default.Object, "obj");
+
+		var ret = function (obj) {
+			Reflect.ownKeys(obj).map(function (propName) {
+				if (obj[propName] === undefined || obj[propName] === null) {
+					delete obj[propName];
+				}
+				return propName;
+			});
+			return obj;
+		}.call(this, obj);
+
+		_assert(ret, _tcomb2.default.Object, "return value");
 
 		return ret;
 	}
